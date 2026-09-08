@@ -1,0 +1,67 @@
+
+> tokenlab@0.1.0 verify
+> npm run typecheck && npm test && npm run test:gateway && npm run build
+
+
+> tokenlab@0.1.0 typecheck
+> tsc --noEmit
+
+
+> tokenlab@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 C:/Users/DanielMichael/TokenLab
+
+
+ Test Files  2 passed (2)
+      Tests  140 passed (140)
+   Start at  12:41:27
+   Duration  1.77s (transform 353ms, setup 0ms, import 494ms, tests 747ms, environment 0ms)
+
+
+> tokenlab@0.1.0 test:gateway
+> node --test server/gemini.test.mjs
+
+✔ exact comparison trims but does not treat partial matches as correct (2.2143ms)
+✔ canonical JSON equality ignores object key order, not array order (0.7759ms)
+✔ health reveals no key and triggers no generation (97.81ms)
+✔ pair sends identical generation settings, separate prompts, no expected-answer leakage (41.8241ms)
+✔ no reference produces null accuracy (8.4222ms)
+✔ cross-origin requests are blocked before spending (8.7695ms)
+✔ Origin and custom client header are required for evaluation (6.6686ms)
+✔ DNS-rebinding Host is rejected (10.0183ms)
+✔ non-JSON content type is rejected (6.566ms)
+✔ invalid JSON and blank prompts are rejected before API calls (12.4691ms)
+✔ oversized prompt or request is rejected (13.5468ms)
+✔ missing configuration never makes a paid request (5.0478ms)
+✔ provider failure does not leak its body or key; second request is not made (6.3151ms)
+✔ local rolling budget stops additional calls (8.7441ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 450.8123
+
+> tokenlab@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 44 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                             0.62 kB │ gzip:     0.40 kB
+dist/assets/lab.worker-CbZAySsC.js                         20.50 kB
+dist/assets/GptEncoding-1lvWYRnr.js                        23.09 kB
+dist/assets/r50k_base-Bgm0-OxU.js                         474.18 kB
+dist/assets/transformers.web-CcHFb0kW.js                  866.72 kB
+dist/assets/cl100k_base-BQdnL0TC.js                       951.25 kB
+dist/assets/o200k_base-CNG2LfoJ.js                      2,013.63 kB
+dist/assets/ort-wasm-simd-threaded.jsep-B0T3yYHD.wasm  21,596.02 kB │ gzip: 5,087.10 kB
+dist/assets/index-CfBE5DLu.css                             19.59 kB │ gzip:     5.46 kB
+dist/assets/index-DJNP32KH.js                             252.71 kB │ gzip:    81.27 kB
+✓ built in 6.55s

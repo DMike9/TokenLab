@@ -1,0 +1,77 @@
+
+> tokenlab@0.1.0 check:core
+> node scripts/check-core.mjs
+
+PASS metrics: savings, factor and rate use the provided counter
+PASS metrics: empty input does not produce NaN or infinity
+PASS metrics: empty output has no fabricated finite compression factor
+PASS metrics: expansion is represented with negative savings
+PASS metrics: Unicode character count is code points
+PASS math: min-max normalization
+PASS math: constant and empty normalization
+PASS math: identical and orthogonal vector cosine
+PASS math: negative cosine is not silently clipped to zero
+PASS math: distance formulas
+PASS math: vectors require nonzero norm and equal dimensions
+PASS math: L2 normalization
+PASS math: empirical entropy is explicitly frequency based
+PASS math: Unicode word segmentation retains negated contractions
+PASS transforms: square and square root
+PASS transforms: normalized log and exponential endpoints
+PASS transforms: sigmoid center
+PASS transforms: softmax sums to one and stays numerically stable
+PASS transforms: lower temperature concentrates probability
+PASS transforms: monotonic functions preserve score order
+PASS transforms: a fixed threshold makes shaping consequential
+PASS transforms: invalid scores and temperatures are rejected
+PASS protection: negation and complete explicit instruction
+PASS protection: numbers, dates, URLs, identifiers and quotations
+PASS protection: custom exact phrases
+PASS protection: duplicate occurrence retention is not presence-only
+PASS protection: entire valid JSON is opaque
+PASS protection: fenced code boundaries remain intact
+PASS protection: transforming gaps never rewrites protected spans
+PASS chunks: exact reconstruction including Unicode and whitespace
+PASS diff: reconstructs both strings
+PASS diff: identity and empty text
+PASS diff: coarse long-input fallback is lossless as a diff
+PASS Pareto: domination is correct and ties survive
+PASS baseline: exact identity
+PASS minify: reduces repeated unprotected spaces
+PASS minify: protects Markdown hard breaks
+PASS deduplicate: repeated context is removed
+PASS deduplicate: exact means case-sensitive
+PASS deduplicate: repetition-count control is effective
+PASS deduplicate: protected repeated instructions survive
+PASS lexical: deterministic phrase compression
+PASS lexical: quotes never rewritten
+PASS stopwords: negations always survive
+PASS importance: protected content overrides an impossible budget
+PASS importance: assembled results obey a feasible budget
+PASS importance: deterministic runs match
+PASS hybrid: zero feature weights produce finite values
+PASS similarity guard: refuses a fabricated no-model fallback
+PASS similarity guard: every deletion compares to original-stage embedding
+PASS baseline: empty input
+PASS baseline: structured JSON remains intact
+PASS baseline: preserves negation, number and user-marked phrase
+PASS minify: empty input
+PASS minify: structured JSON remains intact
+PASS minify: preserves negation, number and user-marked phrase
+PASS deduplicate: empty input
+PASS deduplicate: structured JSON remains intact
+PASS deduplicate: preserves negation, number and user-marked phrase
+PASS lexical: empty input
+PASS lexical: structured JSON remains intact
+PASS lexical: preserves negation, number and user-marked phrase
+PASS stopwords: empty input
+PASS stopwords: structured JSON remains intact
+PASS stopwords: preserves negation, number and user-marked phrase
+PASS importance: empty input
+PASS importance: structured JSON remains intact
+PASS importance: preserves negation, number and user-marked phrase
+PASS hybrid: empty input
+PASS hybrid: structured JSON remains intact
+PASS hybrid: preserves negation, number and user-marked phrase
+
+71/71 pure engine checks passed. These do not validate installed BPE/model/browser dependencies.

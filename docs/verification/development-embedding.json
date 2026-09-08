@@ -1,0 +1,912 @@
+{
+  "exported": {
+    "format": "tokenlab-experiments",
+    "schemaVersion": 1,
+    "exportedAt": "2026-09-08T16:42:03.582Z",
+    "includesPromptText": false,
+    "warning": "Input hashes are identifiers, not anonymization. They can be guessed for known prompts.",
+    "experiments": [
+      {
+        "id": "3add6c09-e3e8-4ff7-9b2e-a0768ac24ee7",
+        "timestamp": "2026-09-08T16:42:02.174Z",
+        "engineVersion": "tokenlab-0.1.0",
+        "inputHash": "fe34801240c8fe9521684ae21b2d77b3f860ac8d595516a08e9e4e7a8a4c5ce7",
+        "outputHash": "783c54ddba30d712567b0bf21b9c736824fb591481e9c4550b5816ce4825d6d8",
+        "methods": [
+          "deduplicate"
+        ],
+        "settings": {
+          "encoding": "o200k_base",
+          "budget": 0.65,
+          "transform": "linear",
+          "cutoff": 0.25,
+          "temperature": 0.25,
+          "steepness": 10,
+          "center": 0.5,
+          "semanticFloor": 0.95,
+          "redundancyThreshold": 1,
+          "ngramSize": 3,
+          "minimumRepetitions": 2,
+          "protectedTerms": [],
+          "useEmbeddings": true,
+          "weights": {
+            "relevance": 0.25,
+            "information": 0.25,
+            "instruction": 0.2,
+            "entity": 0.15,
+            "structure": 0.15,
+            "redundancy": 0.3
+          }
+        },
+        "metrics": {
+          "originalTokens": 372,
+          "compressedTokens": 169,
+          "savedTokens": 203,
+          "savingsPercent": 54.56989247311827,
+          "rate": 0.4543010752688172,
+          "factor": 2.201183431952663,
+          "originalCharacters": 2181,
+          "compressedCharacters": 977,
+          "removedCharacters": 1204,
+          "originalWords": 333,
+          "compressedWords": 151,
+          "removedWords": 182,
+          "protectedTotal": 13,
+          "protectedRetained": 13,
+          "protectionRate": 1
+        },
+        "similarity": {
+          "cosine": 0.7925736428889396,
+          "dot": 0.7925736428889396,
+          "euclidean": 0.6440906102576869,
+          "manhattan": 9.850315342094756,
+          "model": "Xenova/all-MiniLM-L6-v2",
+          "revision": "751bff37182d3f1213fa05d7196b954e230abad9",
+          "dtype": "q8",
+          "originalChunks": 2,
+          "compressedChunks": 1,
+          "aggregation": "model-token-weighted mean of normalized ≤254-wordpiece chunk embeddings, followed by L2 normalization",
+          "elapsedMs": 649
+        },
+        "similarityError": null,
+        "decisions": [
+          {
+            "index": 0,
+            "originalScore": 1,
+            "transformedScore": 1,
+            "kept": true,
+            "protected": false,
+            "tokens": 11,
+            "reason": "First / nonmatching context occurrence"
+          },
+          {
+            "index": 1,
+            "originalScore": 1,
+            "transformedScore": 1,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "First / nonmatching context occurrence"
+          },
+          {
+            "index": 2,
+            "originalScore": 1,
+            "transformedScore": 1,
+            "kept": true,
+            "protected": false,
+            "tokens": 18,
+            "reason": "First / nonmatching context occurrence"
+          },
+          {
+            "index": 3,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 4,
+            "originalScore": 1,
+            "transformedScore": 1,
+            "kept": true,
+            "protected": true,
+            "tokens": 14,
+            "reason": "Negation or logical qualifier"
+          },
+          {
+            "index": 5,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 6,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "tokens": 11,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 7,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 8,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "tokens": 18,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 9,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 10,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": true,
+            "tokens": 14,
+            "reason": "Negation or logical qualifier"
+          },
+          {
+            "index": 11,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 12,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "tokens": 11,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 13,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 14,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "tokens": 18,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 15,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 16,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": true,
+            "tokens": 14,
+            "reason": "Negation or logical qualifier"
+          },
+          {
+            "index": 17,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 18,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "tokens": 11,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 19,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 20,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "tokens": 18,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 21,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 22,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": true,
+            "tokens": 14,
+            "reason": "Negation or logical qualifier"
+          },
+          {
+            "index": 23,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 24,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "tokens": 11,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 25,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 26,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "tokens": 18,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 27,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 28,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": true,
+            "tokens": 14,
+            "reason": "Negation or logical qualifier"
+          },
+          {
+            "index": 29,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 30,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "tokens": 11,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 31,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 32,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "tokens": 18,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 33,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 34,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": true,
+            "tokens": 14,
+            "reason": "Negation or logical qualifier"
+          },
+          {
+            "index": 35,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 36,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "tokens": 11,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 37,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 38,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "tokens": 18,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 39,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 40,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": true,
+            "tokens": 14,
+            "reason": "Negation or logical qualifier"
+          },
+          {
+            "index": 41,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 42,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "tokens": 11,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 43,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 44,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "tokens": 18,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 45,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 46,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": true,
+            "tokens": 14,
+            "reason": "Negation or logical qualifier"
+          },
+          {
+            "index": 47,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": true,
+            "protected": false,
+            "tokens": 1,
+            "reason": "Repeated context; exact text match"
+          },
+          {
+            "index": 48,
+            "originalScore": 1,
+            "transformedScore": 1,
+            "kept": true,
+            "protected": true,
+            "tokens": 14,
+            "reason": "Number or date"
+          },
+          {
+            "index": 49,
+            "originalScore": 1,
+            "transformedScore": 1,
+            "kept": true,
+            "protected": true,
+            "tokens": 10,
+            "reason": "Explicit instruction (heuristic)"
+          },
+          {
+            "index": 50,
+            "originalScore": 1,
+            "transformedScore": 1,
+            "kept": true,
+            "protected": true,
+            "tokens": 6,
+            "reason": "Negation or logical qualifier; Identifier or acronym"
+          }
+        ],
+        "notes": [
+          "Case-sensitive exact sentence/context matching; protected occurrences are not deduplicated.",
+          "N-gram settings compare whole chunks. This version does not delete arbitrary recurring phrases inside a sentence."
+        ],
+        "budgetMet": null,
+        "compressionMs": 2.400000035762787,
+        "totalMs": 652.9000000357628,
+        "stages": [
+          {
+            "method": "deduplicate",
+            "beforeTokens": 372,
+            "afterTokens": 169,
+            "notes": [
+              "Case-sensitive exact sentence/context matching; protected occurrences are not deduplicated.",
+              "N-gram settings compare whole chunks. This version does not delete arbitrary recurring phrases inside a sentence."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "922ab0ff-5f9d-4818-9a34-4fce56df6661",
+        "timestamp": "2026-09-08T16:42:03.061Z",
+        "engineVersion": "tokenlab-0.1.0",
+        "inputHash": "89eef511b4c13d1dc801cb698768af23f88e7caa8934e2dbc4d89da08740ba31",
+        "outputHash": "c4aa8099387b78442a8842dedbf04831d2633f30d08bef23790bfcf638335842",
+        "methods": [
+          "similarity"
+        ],
+        "settings": {
+          "encoding": "o200k_base",
+          "budget": 0.65,
+          "transform": "linear",
+          "cutoff": 0.25,
+          "temperature": 0.25,
+          "steepness": 10,
+          "center": 0.5,
+          "semanticFloor": 0.95,
+          "redundancyThreshold": 1,
+          "ngramSize": 3,
+          "minimumRepetitions": 2,
+          "protectedTerms": [],
+          "useEmbeddings": true,
+          "weights": {
+            "relevance": 0.25,
+            "information": 0.25,
+            "instruction": 0.2,
+            "entity": 0.15,
+            "structure": 0.15,
+            "redundancy": 0.3
+          }
+        },
+        "metrics": {
+          "originalTokens": 54,
+          "compressedTokens": 45,
+          "savedTokens": 9,
+          "savingsPercent": 16.666666666666664,
+          "rate": 0.8333333333333334,
+          "factor": 1.2,
+          "originalCharacters": 297,
+          "compressedCharacters": 251,
+          "removedCharacters": 46,
+          "originalWords": 46,
+          "compressedWords": 39,
+          "removedWords": 7,
+          "protectedTotal": 7,
+          "protectedRetained": 7,
+          "protectionRate": 1
+        },
+        "similarity": {
+          "cosine": 0.9857427961400761,
+          "dot": 0.9857427961400755,
+          "euclidean": 0.1688620967530863,
+          "manhattan": 2.580690959580079,
+          "model": "Xenova/all-MiniLM-L6-v2",
+          "revision": "751bff37182d3f1213fa05d7196b954e230abad9",
+          "dtype": "q8",
+          "originalChunks": 1,
+          "compressedChunks": 1,
+          "aggregation": "model-token-weighted mean of normalized ≤254-wordpiece chunk embeddings, followed by L2 normalization",
+          "elapsedMs": 0.20000004768371582
+        },
+        "similarityError": null,
+        "decisions": [
+          {
+            "index": 0,
+            "originalScore": 0.25574645026833004,
+            "transformedScore": 0.25574645026833004,
+            "kept": true,
+            "protected": false,
+            "reason": "Restored: cosine 0.81384 below floor 0.95",
+            "tokens": 14
+          },
+          {
+            "index": 1,
+            "originalScore": 0.2190849730287718,
+            "transformedScore": 0.2190849730287718,
+            "kept": true,
+            "protected": false,
+            "reason": "Restored: cosine 0.87418 below floor 0.95",
+            "tokens": 9
+          },
+          {
+            "index": 2,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "reason": "Deletion retained: cosine 0.98574 ≥ floor 0.95",
+            "tokens": 8
+          },
+          {
+            "index": 3,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "reason": "Deletion retained: cosine 1.00000 ≥ floor 0.95",
+            "tokens": 1
+          },
+          {
+            "index": 4,
+            "originalScore": 0.563791480643992,
+            "transformedScore": 0.563791480643992,
+            "kept": true,
+            "protected": true,
+            "reason": "Explicit instruction (heuristic); Negation or logical qualifier; Identifier or acronym",
+            "tokens": 7
+          },
+          {
+            "index": 5,
+            "originalScore": 0.3890385974648531,
+            "transformedScore": 0.3890385974648531,
+            "kept": true,
+            "protected": true,
+            "reason": "Negation or logical qualifier",
+            "tokens": 6
+          },
+          {
+            "index": 6,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "reason": "Deletion retained: cosine 1.00000 ≥ floor 0.95",
+            "tokens": 1
+          },
+          {
+            "index": 7,
+            "originalScore": 0.8318957403219961,
+            "transformedScore": 0.8318957403219961,
+            "kept": true,
+            "protected": true,
+            "reason": "Explicit instruction (heuristic); Identifier or acronym",
+            "tokens": 13
+          }
+        ],
+        "notes": [
+          "Greedy deletion order can affect the result. Every accepted candidate is compared with the original input to this stage, never just the previous candidate.",
+          "The cosine floor constrains an embedding proxy, NOT task correctness.",
+          "BUDGET UNMET: protected chunks and/or the semantic floor prevented further deletion."
+        ],
+        "budgetMet": false,
+        "compressionMs": 280,
+        "totalMs": 280.4000000357628,
+        "stages": [
+          {
+            "method": "similarity",
+            "beforeTokens": 54,
+            "afterTokens": 45,
+            "notes": [
+              "Greedy deletion order can affect the result. Every accepted candidate is compared with the original input to this stage, never just the previous candidate.",
+              "The cosine floor constrains an embedding proxy, NOT task correctness.",
+              "BUDGET UNMET: protected chunks and/or the semantic floor prevented further deletion."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "df328e90-8ec9-4066-b896-92a7d71ffe01",
+        "timestamp": "2026-09-08T16:42:03.430Z",
+        "engineVersion": "tokenlab-0.1.0",
+        "inputHash": "7c4a6a645d270b297f70341c8266673846f43bfa86b2acbda1c3ff363efd2c3b",
+        "outputHash": "e8ffa342d4c0d1f166b4faddb659b9efb20b6f13e1d4cb873ee13df0f3caef65",
+        "methods": [
+          "hybrid"
+        ],
+        "settings": {
+          "encoding": "o200k_base",
+          "budget": 0.65,
+          "transform": "linear",
+          "cutoff": 0.25,
+          "temperature": 0.25,
+          "steepness": 10,
+          "center": 0.5,
+          "semanticFloor": 0.95,
+          "redundancyThreshold": 1,
+          "ngramSize": 3,
+          "minimumRepetitions": 2,
+          "protectedTerms": [],
+          "useEmbeddings": true,
+          "weights": {
+            "relevance": 0.25,
+            "information": 0.25,
+            "instruction": 0.2,
+            "entity": 0.15,
+            "structure": 0.15,
+            "redundancy": 0.3
+          }
+        },
+        "metrics": {
+          "originalTokens": 81,
+          "compressedTokens": 17,
+          "savedTokens": 64,
+          "savingsPercent": 79.01234567901234,
+          "rate": 0.20987654320987653,
+          "factor": 4.764705882352941,
+          "originalCharacters": 471,
+          "compressedCharacters": 95,
+          "removedCharacters": 376,
+          "originalWords": 70,
+          "compressedWords": 13,
+          "removedWords": 57,
+          "protectedTotal": 3,
+          "protectedRetained": 3,
+          "protectionRate": 1
+        },
+        "similarity": {
+          "cosine": 0.40204483280046915,
+          "dot": 0.4020448328004695,
+          "euclidean": 1.0935768534488377,
+          "manhattan": 17.032118976791367,
+          "model": "Xenova/all-MiniLM-L6-v2",
+          "revision": "751bff37182d3f1213fa05d7196b954e230abad9",
+          "dtype": "q8",
+          "originalChunks": 1,
+          "compressedChunks": 1,
+          "aggregation": "model-token-weighted mean of normalized ≤254-wordpiece chunk embeddings, followed by L2 normalization",
+          "elapsedMs": 99.30000001192093
+        },
+        "similarityError": null,
+        "decisions": [
+          {
+            "index": 0,
+            "originalScore": 0.24414757208186433,
+            "transformedScore": 0.24414757208186433,
+            "kept": false,
+            "protected": false,
+            "reason": "Below shaped-score cutoff",
+            "tokens": 11
+          },
+          {
+            "index": 1,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "reason": "Below shaped-score cutoff",
+            "tokens": 11
+          },
+          {
+            "index": 2,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "reason": "Below shaped-score cutoff",
+            "tokens": 10
+          },
+          {
+            "index": 3,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "reason": "Below shaped-score cutoff",
+            "tokens": 1
+          },
+          {
+            "index": 4,
+            "originalScore": 0.20121248946792564,
+            "transformedScore": 0.20121248946792564,
+            "kept": false,
+            "protected": false,
+            "reason": "Below shaped-score cutoff",
+            "tokens": 10
+          },
+          {
+            "index": 5,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "reason": "Below shaped-score cutoff",
+            "tokens": 9
+          },
+          {
+            "index": 6,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "reason": "Below shaped-score cutoff",
+            "tokens": 1
+          },
+          {
+            "index": 7,
+            "originalScore": 0.2285059625483632,
+            "transformedScore": 0.2285059625483632,
+            "kept": false,
+            "protected": false,
+            "reason": "Below shaped-score cutoff",
+            "tokens": 9
+          },
+          {
+            "index": 8,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "reason": "Below shaped-score cutoff",
+            "tokens": 8
+          },
+          {
+            "index": 9,
+            "originalScore": 0,
+            "transformedScore": 0,
+            "kept": false,
+            "protected": false,
+            "reason": "Below shaped-score cutoff",
+            "tokens": 1
+          },
+          {
+            "index": 10,
+            "originalScore": 0.4535906936215025,
+            "transformedScore": 0.4535906936215025,
+            "kept": true,
+            "protected": true,
+            "reason": "Explicit instruction (heuristic)",
+            "tokens": 11
+          },
+          {
+            "index": 11,
+            "originalScore": 0.85,
+            "transformedScore": 0.85,
+            "kept": true,
+            "protected": true,
+            "reason": "Negation or logical qualifier; Identifier or acronym",
+            "tokens": 7
+          }
+        ],
+        "notes": [
+          "Experimental weighted objective. Relevance uses local embedding cosine, anchored to the last nonempty chunk.",
+          "Information value is empirical word-frequency surprisal within this prompt, NOT language-model entropy or perplexity.",
+          "All scoring weights are heuristics. Protected chunks bypass score filtering; chunk boundaries retain surrounding context.",
+          "Monotonic transforms preserve raw rank. Differences arise from a fixed cutoff and utility divided by varying chunk token cost.",
+          "Greedy selection is not globally optimal. Every assembled candidate is retokenized; chunk token counts are not assumed additive."
+        ],
+        "budgetMet": true,
+        "compressionMs": 116.30000001192093,
+        "totalMs": 216.0999999642372,
+        "stages": [
+          {
+            "method": "hybrid",
+            "beforeTokens": 81,
+            "afterTokens": 17,
+            "notes": [
+              "Experimental weighted objective. Relevance uses local embedding cosine, anchored to the last nonempty chunk.",
+              "Information value is empirical word-frequency surprisal within this prompt, NOT language-model entropy or perplexity.",
+              "All scoring weights are heuristics. Protected chunks bypass score filtering; chunk boundaries retain surrounding context.",
+              "Monotonic transforms preserve raw rank. Differences arise from a fixed cutoff and utility divided by varying chunk token cost.",
+              "Greedy selection is not globally optimal. Every assembled candidate is retokenized; chunk token counts are not assumed additive."
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "errors": [],
+  "network": []
+}

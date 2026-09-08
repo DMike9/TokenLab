@@ -1,0 +1,19 @@
+
+> tokenlab@0.1.0 test:model
+> playwright test --config playwright.model.config.ts
+
+
+Running 2 tests using 1 worker
+
+node.exe : (node:29152) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ((node:29152) Wa... env being set.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 e2e-model\embedding.spec.ts:5:1 › real public model downloads and browser-worker inference (8.1s)
+  ok 2 e2e-model\embedding.spec.ts:36:1 › long Unicode tails affect real worker embeddings beyond the first window (5.2s)
+
+  2 passed (15.8s)

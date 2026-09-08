@@ -1,0 +1,45 @@
+{
+  "name": "tokenlab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Interactive experiments in prompt compression and information preservation.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check:core": "node scripts/check-core.mjs",
+    "test:e2e": "playwright test",
+    "test:model": "playwright test --config playwright.model.config.ts",
+    "gemini": "node --env-file-if-exists=.env.local server/gemini.mjs",
+    "verify": "npm run typecheck && npm test && npm run test:gateway && npm run build",
+    "test:gateway": "node --test server/gemini.test.mjs"
+  },
+  "dependencies": {
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "gpt-tokenizer": "4.0.0",
+    "@huggingface/transformers": "3.8.1"
+  },
+  "overrides": {
+    "@huggingface/transformers": {
+      "sharp": "0.35.3"
+    }
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@types/node": "^22.0.0",
+    "typescript": "~5.9.3",
+    "vite": "~7.3.6",
+    "vitest": "^4.1.0",
+    "@playwright/test": "^1.56.0"
+  }
+}
