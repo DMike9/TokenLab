@@ -22,7 +22,7 @@ jobs:
         run: |
           if [ -f package-lock.json ]; then npm ci; else npm install; fi
       - run: npm run verify
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: dist
   deploy:
