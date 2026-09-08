@@ -1,12 +1,18 @@
 # TokenLab
 
-**Interactive experiments in prompt compression and information preservation.**
+**See what prompt compression removes. Investigate whether the information needed for the task survives.**
 
-One prompt. Different experiments. What survives?
+TokenLab is an open-source lab for inspecting that tradeoff. It exists because a shorter prompt can lose the instruction, fact or relationship needed to answer correctly. The question is: **what disappeared, why, and does the task still work?**
 
-TokenLab is a local-first research playground for comparing interpretable prompt transformations against the same original text. It makes the trade-off inspectable: what was removed, why, how the chosen tokenizer changes its count, and whether a measured embedding score or downstream answer also changed.
+Try **Explore**: remove repeated background, protect a critical “Do NOT” instruction, and try a token budget that cannot fit the protected content. These use real examples and the existing compression engine. **Research** exposes all methods, mathematical controls, chains, optional browser embeddings and the experiment notebook.
 
-> **Locally verified development build.** Strict TypeScript, 140 unit tests, 14 mocked gateway tests, 71 pure-engine checks, the production build, six desktop/mobile browser tests and real browser embeddings passed on Windows/Chromium. Independent tiktoken fixtures matched all three encodings. See [BUILD-STATUS](docs/BUILD-STATUS.md) for commands, screenshots, model revision and limits. Live Gemini and deployment remain unverified. No benchmark or state-of-the-art performance is claimed.
+**Implemented:** exact BPE counting, transparent compression heuristics, protected-content checks, recorded result settings, visual diffs, scoped exports and local embedding measurements. **Still research:** whether compression preserves downstream task correctness. Cosine is not accuracy; protected-string retention is not complete meaning preservation. Trained compressors, benchmark datasets and a composite quality score are not implemented.
+
+Implementation, debugging and test development used substantial AI assistance. This is an experimental portfolio project, with no claim of university or employer sponsorship or scientific validation. [Build evidence](docs/BUILD-STATUS.md) and the [implementation log](docs/IMPLEMENTATION-LOG.md) distinguish executed checks from future work.
+
+To try it locally with Node 22.12+: run `npm ci`, then `npm run dev`, and open **http://127.0.0.1:5173/**. No API key is needed.
+
+![TokenLab Explore: three guided experiments using the real compression engine](docs/verification/phase1/explore-desktop.png)
 
 ## Start
 

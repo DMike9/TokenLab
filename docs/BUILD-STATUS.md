@@ -1,5 +1,25 @@
 # Build status: locally verified development build
 
+## Phase 1 update — September 8, 2026
+
+**First-time UX and result clarity: COMPLETE; commit-ready.** Changes are left uncommitted for human review. Full change list, decisions, failure history and limitations: [IMPLEMENTATION-LOG](IMPLEMENTATION-LOG.md).
+
+| Command actually run in this phase | Actual result |
+| --- | --- |
+| `npm run verify` | Passed: strict TypeScript, **140/140 unit tests**, **14/14 mocked gateway tests**, production build (46 modules). No live Google calls. |
+| `npm run check:core` | **71/71 passed**. |
+| `npm run test:e2e` | **13/13 passed**, including seven new Phase 1 tests and all prior browser checks. |
+| `npm run test:e2e -- e2e/phase1.spec.ts` | Initial protection regression **failed before the fix** (count stayed 0), then passed. Final expanded focused suite: **7/7 passed**. An intermediate tab-focus failure was fixed with a visible focus style, retaining assertions. |
+| `npm run test:model` | **2/2 passed** with real browser embeddings, recorded model/floor/revision display, immutable measurements after disabling embeddings, and long Unicode inputs. [Measurements](verification/phase1/embedding-evidence.json). |
+| `npm audit` / `git diff --check` | **0 vulnerabilities** / passed. Dependencies unchanged. |
+| `npm run dev` / HTTP check | New start reported occupied port 5173; reused existing Vite server. **HTTP 200** at **http://127.0.0.1:5173/**. |
+
+Inspected real screenshots: [Explore desktop](verification/phase1/explore-desktop.png), [Explore mobile](verification/phase1/explore-mobile.png), [desktop result](verification/phase1/result-desktop.png), [mobile result](verification/phase1/result-mobile.png), [model result](verification/phase1/embedding-results.png). Desktop 1440×1000 and mobile 390×844; no page-wide mobile overflow. Guided/example browser checks recorded no page/console errors. In-app browser setup remains unavailable (`missing field sandboxPolicy`); Playwright Chromium was used successfully.
+
+No Phase 1 functional blocker remains. No manual screen-reader, physical-device or other-browser checks were performed. This phase's changed UI was browser-tested on the development server; no new preview/deployment check is claimed. No Gemini process, paid API call, push or deployment was performed. The prior verification below is retained as historical evidence.
+
+## Initial local integration verification (before Phase 1)
+
 Verified September 8, 2026 in this Windows workspace with Node **24.15.0**, npm **11.12.1**, Python **3.13.14** (fixture generation only), and Playwright **1.63.0 / Chromium 153.0.8010.12**. No Gemini key was inspected, no paid calls were made, and nothing was published or deployed.
 
 The folder initially had no Git repository. A local repository now retains the verified source, generated lockfile, tests and evidence. No remote was configured; secrets, dependencies, model caches and build output are excluded.

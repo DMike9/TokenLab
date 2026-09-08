@@ -8,6 +8,7 @@ import { protectionRetention } from '../src/engine/protection.js';
 import type { Run } from '../src/engine/types.js';
 
 async function exportRuns(page: Page, includeText = true): Promise<Run[]> {
+    await page.getByLabel('Export scope').selectOption('session');
     await page.getByLabel('Include prompt text in JSON').setChecked(includeText);
     const downloaded = page.waitForEvent('download');
     await page.getByRole('button', { name: 'Export JSON', exact: true }).click();
@@ -23,6 +24,7 @@ test('all examples and deterministic methods preserve occurrences and use exact 
     page.on('pageerror', e => errors.push(e.message));
     page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
     await page.goto('/');
+    await page.getByRole('button', { name: 'Research', exact: true }).click();
     const tokenizer = await getTokenizer('o200k_base');
     for (const example of EXAMPLES) {
         await page.getByLabel('Load example').selectOption(example.id);
@@ -46,6 +48,7 @@ test('all examples and deterministic methods preserve occurrences and use exact 
 });
 test('math controls, infeasible protection, chain counts, diffs and both export formats', async ({ page }) => {
     await page.goto('/');
+    await page.getByRole('button', { name: 'Research', exact: true }).click();
     await page.getByLabel('Load example').selectOption('negation');
     await page.getByLabel('Target retained', { exact: true }).fill('0.1');
     await page.getByRole('button', { name: 'Run all 7 transforms against this prompt' }).click();
@@ -99,6 +102,7 @@ test('math controls, infeasible protection, chain counts, diffs and both export 
 test('Unicode token inspection across encodings, custom protection and mobile results', async ({ page }, info) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/');
+    await page.getByRole('button', { name: 'Research', exact: true }).click();
     const input = 'café 🌱 中文 👩🏽‍💻 e\u0301 <|endoftext|>\nordinary   background. rare phrase. rare phrase. Do NOT change 42.';
     await page.getByLabel('Original prompt', { exact: true }).fill(input);
     await page.locator('.protection-panel summary').click();

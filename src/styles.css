@@ -15,6 +15,38 @@
 *{
   box-sizing:border-box
 }
+[hidden]{display:none!important}
+.experience{margin-bottom:28px}
+.mode-switch{margin-bottom:16px}
+.mode-switch button[aria-pressed=true]{background:var(--lime);color:#17220f;border-color:var(--lime)}
+.guided-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.guided-grid button{text-align:left;padding:20px;background:var(--surface)}
+.guided-grid small,.guided-grid strong,.guided-grid span{display:block}
+.guided-grid small{font:9px/1.6 var(--mono);color:var(--lime);letter-spacing:1px}
+.guided-grid strong{font-size:18px;margin:12px 0}
+.guided-grid span{font-size:13px;line-height:1.65;color:var(--muted)}
+.experience>.fineprint{margin:14px 0 0}
+.lab-layout.explore-layout{grid-template-columns:minmax(0,1fr)}
+.explore-next{margin-bottom:24px}
+.result-context{border:1px solid var(--line);border-radius:8px;padding:16px;margin:20px 0;background:#0d141b}
+.result-context>strong{font-size:13px;color:var(--purple)}
+.result-context>.fineprint{margin:8px 0 14px}
+.result-context dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:0 0 14px}
+.result-context dt{font:10px var(--mono);color:var(--muted);margin-bottom:5px}
+.result-context dd{font:12px/1.7 var(--mono);margin:0;overflow-wrap:anywhere}
+.result-context summary{font-size:11px;color:var(--muted)}
+.result-context pre{max-height:260px;overflow:auto;margin-bottom:0}
+.settings-changed{color:#efcf8e}
+.result-explanation{color:#c4d7bb}
+.result-metrics .task-result{grid-column:1/-1;border-top:1px solid var(--line);padding-top:16px}
+.result-metrics .task-result strong{font-size:20px}
+.export-scope{display:flex;flex-direction:column;gap:8px;font-size:11px;color:var(--muted);max-width:100%}
+.export-scope select{max-width:100%;font-size:11px}
+[role=tabpanel]:focus-visible{outline:2px solid var(--lime);outline-offset:5px;border-radius:4px}
+.tabs button:focus{outline:2px solid var(--lime);outline-offset:-3px}
+#result-heading:focus{outline:2px solid var(--lime);outline-offset:5px}
+@media(max-width:820px){.guided-grid{grid-template-columns:1fr}.guided-grid button{padding:16px}}
+@media(max-width:520px){.result-context dl{grid-template-columns:1fr}.result-context{padding:13px}}
 html{
   scroll-behavior:smooth;
   scroll-padding-top:30px

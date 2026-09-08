@@ -3,6 +3,7 @@ import type { Encoding, Method, Metrics, Run, Settings, Span, TokenInfo } from '
 export interface Analysis {
     input: string;
     encoding: Encoding;
+    protectedTerms: string[];
     tokens: TokenInfo[];
     total: number;
     metrics: Metrics;

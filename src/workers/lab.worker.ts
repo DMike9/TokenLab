@@ -33,7 +33,7 @@ self.onmessage = (event: MessageEvent<Request>) => {
             else if (action === 'analyze') {
                 progress('Loading the selected BPE encoding…');
                 const tokenizer = await getTokenizer(settings.encoding);
-                result = { input: text, encoding: settings.encoding, ...inspectTokens(text, tokenizer), metrics: calculateMetrics(text, text, tokenizer.count, settings.protectedTerms), protection: protectedSpans(text, settings.protectedTerms) };
+                result = { input: text, encoding: settings.encoding, protectedTerms: [...settings.protectedTerms], ...inspectTokens(text, tokenizer), metrics: calculateMetrics(text, text, tokenizer.count, settings.protectedTerms), protection: protectedSpans(text, settings.protectedTerms) };
             }
             else
                 result = await runExperiment(text, request.methods ?? ['baseline'], settings, progress);

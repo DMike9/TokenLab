@@ -39,7 +39,17 @@ Semantic guard compares each proposed deletion to a fixed vector for its stage's
 
 Standalone metrics define edge cases explicitly. Empty ratios use null. Similarity requires nonzero, equal-dimensional finite vectors. Token counts are for raw selected-encoding text. Timing separates the compression call sequence from the total measured run; warm caches and downloads affect timings. Do not compare these numbers as controlled hardware benchmarks.
 
-The comparison table is filtered by original text and encoding. The Pareto plot includes only measured similarity rows and compatible model revision/dtype. Run exports include all in-memory rows and hashes, and omit raw text by default. Import/replay of experiment files is a future feature.
+The comparison table is filtered by original text and encoding. The Pareto plot includes only measured similarity rows and compatible model revision/dtype. Export scope is explicit: current prompt plus selected encoding (the visible table), or the full in-memory session. Both JSON and CSV honor this selection. Raw text remains excluded by default; JSON text inclusion requires an explicit opt-in. Import/replay of experiment files is a future feature.
+
+## Explore, draft controls and recorded results
+
+Explore is the initial view and runs three presets using existing examples and strategies. Research exposes the complete instrument. Switching views preserves controls and history; selecting a guide deliberately replaces the editor and draft controls with a displayed preset, with existing runs retained in memory. View preference is session-only; no persistence or telemetry was added.
+
+Draft controls are distinct from the immutable settings stored on a run. Result metadata, diff protection, metrics and token inspection use the recorded run, including its tokenizer when the draft encoding has changed. A conservative change notice compares all draft settings and the intended method sequence, even settings not applicable to that method. The snapshot labels unused controls as not applied. A chain's budget is per applicable stage, and its displayed budget status describes the final stage.
+
+Analysis snapshots now include custom protected terms as well as text and encoding. A change to any of these invalidates the displayed analysis until analysis or a run refreshes it. Token inspection can reload the original with an older result's recorded encoding without re-running compression. Task correctness is not measured by a compression run; separate optional downstream evaluations remain in Gemini Arena.
+
+Result tabs use associated tab/tabpanel IDs, roving tabindex, automatic activation on Left/Right/Home/End, and visible focus. Hidden Research controls and inactive panels are excluded from keyboard navigation.
 
 ## Gemini security boundary
 

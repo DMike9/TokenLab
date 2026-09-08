@@ -4,6 +4,7 @@ test('real app: independently compress, inspect tokens, export, and capture desk
     page.on('pageerror', e => pageErrors.push(e.message));
     await page.setViewportSize({ width: 1440, height: 1000 });
     await page.goto('/');
+    await page.getByRole('button', { name: 'Research', exact: true }).click();
     await expect(page.getByRole('heading', { name: 'Original prompt', exact: true })).toBeVisible();
     await page.getByLabel('Load example').selectOption('redundancy');
     await page.getByRole('button', { name: 'Analyze prompt', exact: false }).click();
@@ -29,6 +30,7 @@ test('real app: independently compress, inspect tokens, export, and capture desk
 });
 test('JSON is preserved, and changing input isolates the notebook', async ({ page }) => {
     await page.goto('/');
+    await page.getByRole('button', { name: 'Research', exact: true }).click();
     await page.getByLabel('Load example').selectOption('json');
     const original = await page.getByLabel('Original prompt', { exact: true }).inputValue();
     await page.locator('.method-card').filter({ hasText: 'Importance + math' }).click();
@@ -45,6 +47,7 @@ test('JSON is preserved, and changing input isolates the notebook', async ({ pag
 test('mobile has no page-wide overflow and Gemini is opt-in', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/');
+    await page.getByRole('button', { name: 'Research', exact: true }).click();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
     await page.locator('.arena summary').click();
     await expect(page.getByRole('button', { name: 'Check local gateway', exact: true })).toBeDisabled();
