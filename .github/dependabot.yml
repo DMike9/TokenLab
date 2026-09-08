@@ -1,10 +1,38 @@
 version: 2
+# During active development, review major migrations as deliberate projects.
+# allow.update-types filters version updates ONLY; security fixes (including
+# majors) remain eligible. Do not replace it with broad version ignores.
+# https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-options-reference#update-types-allow
 updates:
   - package-ecosystem: npm
     directory: /
     schedule:
       interval: weekly
+    open-pull-requests-limit: 1
+    allow:
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
+    groups:
+      npm-compatible:
+        applies-to: version-updates
+        patterns: ["*"]
+        update-types: [minor, patch]
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
+    open-pull-requests-limit: 1
+    allow:
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
+    groups:
+      actions-compatible:
+        applies-to: version-updates
+        patterns: ["*"]
+        update-types: [minor, patch]
+# The limits and groups above apply to version updates, not security updates.
+# Keep Dependabot alerts/security updates enabled in repository settings.

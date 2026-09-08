@@ -83,3 +83,72 @@ No approval blocks remain. The reviewer can assess these deliberately small assu
 ### Deferred
 
 Phase 2 and later work remain untouched: explicit task anchors, LLMLingua, trained models, benchmark datasets, paid Gemini evaluation, deployment, a composite TokenLab score and cloud infrastructure. Stop after Phase 1.
+
+## 2026-09-08: Dependabot cleanup
+
+### Scope and decision
+
+Inspected the local Dependabot file, package.json, real package-lock.json, both Actions workflows, and all ten open Dependabot PRs through the connected GitHub tools. Read each PR's metadata, release notes and diff, and fetched the workflow run associated with each PR head. No dependency or action upgrade is required now on the evidence available. Recommend merging **none** and closing/deferring **#1–#10**. These are individual major-version update PRs; replace routine future churn with the grouped policy below, rather than combining these majors into a single upgrade.
+
+The inspected PRs were based on initial commit `2439101527ac49670bd8323414814ef084d6a0f1`; local Phase 1 is committed as `50735a5`. Green historical PR checks are useful evidence, not verification of those upgrades against today's application. No candidate branch was applied locally or represented as locally validated.
+
+### Configuration
+
+- Both npm and GitHub Actions remain on a weekly schedule at the repository root.
+- Each ecosystem permits one open routine PR and has one group covering minor/patch updates. This bounds routine open PRs at two across the repository; compatible React/runtime/tooling updates can travel together and still require review and CI.
+- `allow.update-types` permits only `version-update:semver-minor` and `version-update:semver-patch`. GitHub explicitly documents that this filter does **not** apply to security updates, including fixes requiring a major.
+- Groups explicitly apply only to `version-updates`; security updates are not folded into routine groups or constrained by their open-PR limit. No broad ignored version ranges, security-alert dismissals, auto-merge, alternate target branch or workflow-permission changes were introduced.
+
+Policy behavior was checked against [GitHub's current Dependabot reference](https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-options-reference#update-types-allow) and the YAML was validated against the current [SchemaStore Dependabot schema](https://json.schemastore.org/dependabot-2.0.json). The configuration remains local until a human commits and pushes it to the default branch.
+
+### PR disposition and compatibility evidence
+
+| PR | Exact dependency/action update | Disposition | Observed PR CI | Reason and evidence still required |
+| --- | --- | --- | --- | --- |
+| [#1](https://github.com/DMike9/TokenLab/pull/1) | actions/upload-artifact from 4 to 7 | Close / defer | [success](https://github.com/DMike9/TokenLab/actions/runs/34253863486) | CI passed, but this skips three action majors and changes artifact/runtime behavior. Defer to a coordinated Actions maintenance change with upload/download evidence review; no immediate TokenLab security fix was established. |
+| [#2](https://github.com/DMike9/TokenLab/pull/2) | actions/upload-pages-artifact from 3 to 5 | Close / defer | [success](https://github.com/DMike9/TokenLab/actions/runs/34253869229) | CI passed but does not execute this manual Pages action. Defer the two-major artifact change until the Pages artifact/deployment contract can be checked together with the other Pages actions. |
+| [#3](https://github.com/DMike9/TokenLab/pull/3) | actions/configure-pages from 5 to 6 | Close / defer | [success](https://github.com/DMike9/TokenLab/actions/runs/34253872339) | CI passed but does not execute the manual Pages configuration step. Defer to the coordinated Pages migration; permissions and configuration behavior still need validation. |
+| [#4](https://github.com/DMike9/TokenLab/pull/4) | actions/deploy-pages from 4 to 5 | Close / defer | [success](https://github.com/DMike9/TokenLab/actions/runs/34253880516) | CI passed but never runs the manual deployment job. Defer its runtime/deployment migration until deployment is authorized and the Pages action set can be verified together. |
+| [#5](https://github.com/DMike9/TokenLab/pull/5) | actions/setup-node from 4 to 7 | Close / defer | [success](https://github.com/DMike9/TokenLab/actions/runs/34253889894) | CI passed for Node 22 setup, but the PR also changes the unexecuted Pages workflow and skips three majors. Defer a coordinated runner/cache/runtime review. Upstream notes include dependency security fixes; their applicability to this repository has not been established (see risks below). |
+| [#6](https://github.com/DMike9/TokenLab/pull/6) | vitest from 4.1.11 to 5.0.0 | Close / defer | [success](https://github.com/DMike9/TokenLab/actions/runs/34253908309) | CI passed on the earlier application baseline. Defer a dedicated test-runner migration: the diff changes the Vitest dependency graph and runtime/peer requirements. Revalidate the current application and browser suites together with the Vite compatibility matrix. |
+| [#7](https://github.com/DMike9/TokenLab/pull/7) | vite from 7.3.6 to 8.2.2 | Close / defer | [success](https://github.com/DMike9/TokenLab/actions/runs/34253935219) | CI passed on the earlier application baseline. Defer a dedicated build-tool migration; require current production worker, tokenizer/WASM asset and real browser embedding checks, which ordinary CI does not cover. |
+| [#8](https://github.com/DMike9/TokenLab/pull/8) | @huggingface/transformers from 3.8.1 to 4.2.0 | Close / defer | [success](https://github.com/DMike9/TokenLab/actions/runs/34253942708) | CI passed, but regular CI does not run test:model. Defer until actual browser-worker inference, model/revision resolution, q8/WASM loading and full long-input chunking pass on Transformers 4; the existing real-model evidence is for 3.8.1. |
+| [#9](https://github.com/DMike9/TokenLab/pull/9) | @types/node from 22.20.1 to 26.4.1 | Close / defer | [success](https://github.com/DMike9/TokenLab/actions/runs/34253951895) | CI passed, but Node 26 declarations exceed the Node 22 CI/minimum-runtime contract and can admit unavailable APIs. Keep the types on major 22 until an intentional runtime-support change. |
+| [#10](https://github.com/DMike9/TokenLab/pull/10) | typescript from 5.9.3 to 7.0.2 | Close / defer | [failure](https://github.com/DMike9/TokenLab/actions/runs/34253964895) | CI failed at npm run check:core; browser installation/tests were skipped. TypeScript 7 changes compiler packaging, while scripts/check-core.mjs explicitly launches node_modules/typescript/bin/tsc with Node. Investigate that compatibility boundary in a dedicated migration; this inspection did not reproduce the exact error locally. |
+
+For #10, the GitHub job step API showed `npm run verify` succeeded, `npm run check:core` failed, and both Playwright steps were skipped ([job](https://github.com/DMike9/TokenLab/actions/runs/34253964895/job/102154949010)). No assertions or compiler safeguards were changed to accept this upgrade.
+
+**Remote disposition:** Closed **#1, #2, #3, #4, #5, #6, #7, #8, #9 and #10** through the connected GitHub update-pull-request tool on 2026-09-08, 18:34:58–18:35:49 UTC. Every response confirmed `state: closed` and `merged: false`. A fresh repository search for `is:pr is:open` then returned **zero PRs**. No PR was merged and no bot ignore commands were posted. No PR is recommended for merge.
+
+### Commands and results for this cleanup
+
+| Executed command/check | Actual result |
+| --- | --- |
+| `npm audit --json` | Passed; **0 vulnerabilities** in the current npm dependency graph. This does not audit bundled GitHub Action dependencies. |
+| `npm run verify` | Passed: strict TypeScript, **140/140 Vitest tests**, **14/14 mocked gateway tests**, and Vite 7.3.6 production build (46 modules). |
+| `npm run check:core` | **71/71 passed** with the retained TypeScript 5.9.3 toolchain. |
+| `gh --version` | GitHub CLI unavailable; the connected GitHub tools provided PR reads and disposition access instead. |
+| `.cache/tiktoken-venv/Scripts/python.exe -c "import yaml,jsonschema; print('YAML and JSON Schema available')"` | Initially failed: PyYAML was absent from the existing ignored local Python environment. |
+| `.cache/tiktoken-venv/Scripts/python.exe -m pip install PyYAML jsonschema` | Passed; installed only local validation tools in the ignored environment, without editing application dependencies or the npm lockfile. |
+| `Invoke-WebRequest -Uri https://json.schemastore.org/dependabot-2.0.json -OutFile .cache/dependabot-schema.json` | Downloaded the actual schema; it supports `allow.update-types`. |
+| YAML/JSON Schema validation command below | Passed with no schema errors. |
+| `git diff --check` | Passed; Git reported only its existing Windows LF-to-CRLF normalization notice. |
+
+Exact YAML validation command:
+
+```powershell
+.cache/tiktoken-venv/Scripts/python.exe -c "import json,yaml,jsonschema; from pathlib import Path; schema=json.loads(Path('.cache/dependabot-schema.json').read_text(encoding='utf-8')); config=yaml.safe_load(Path('.github/dependabot.yml').read_text(encoding='utf-8')); jsonschema.validate(config,schema); print('PASS: Dependabot YAML validates against SchemaStore schema')"
+```
+
+No browser/model suites were rerun for this configuration/documentation-only change. Earlier Phase 1 browser/model results above remain historical evidence for the retained versions. Package manifests, lockfile, application source, action references and tests are unchanged. Gateway tests mocked Google; no real Gemini calls, secret reads, push or deployment occurred.
+
+Final scope check: `git diff --exit-code -- package.json package-lock.json .github/workflows src tests e2e e2e-model` returned 0 with no differences. Only `.github/dependabot.yml`, `docs/IMPLEMENTATION-LOG.md` and `docs/BUILD-STATUS.md` changed; these are ready for human commit/push. No commit was created in this cleanup.
+
+### Unresolved risks and revisit criteria
+
+- GitHub has not processed the new configuration yet because pushing is prohibited. Schema validation and documentation review are local evidence, not an observed Dependabot scheduling run.
+- Repository-level Dependabot alerts/security-update settings were not exposed by the available connector and could not be confirmed; YAML preserves eligibility but cannot enable those settings itself. Keep both enabled in repository settings. No security alert was dismissed.
+- The clean npm audit is a point-in-time result and does not prove the Actions bundles are vulnerability-free. [setup-node release notes](https://github.com/actions/setup-node/releases/tag/v6.5.0) mention security overrides for undici/fast-xml-parser; the [upstream advisory page](https://github.com/actions/setup-node/security/advisories) did not establish a TokenLab-specific remediation requirement. The workflows currently do not request package-manager caching. Prioritize an Actions review if an applicable advisory or runner-runtime retirement affects the retained majors.
+- Review deferred majors at the next maintenance milestone, or earlier for an applicable security fix, upstream support retirement or a required capability. Security-driven majors must receive an explicit compatibility review; they remain eligible for Dependabot PRs.
+- Floating major Actions tags can receive upstream minor/patch changes without a new PR. This cleanup retains that existing choice; it does not establish immutable action pinning.
+- For a future npm major migration, run `npm ci`, `npm run verify`, `npm run check:core`, `npm run test:e2e`, and `npm run test:model` where worker/model/build behavior is affected. For Actions, verify both CI artifact behavior and the coordinated Pages workflow within the authorization then available.

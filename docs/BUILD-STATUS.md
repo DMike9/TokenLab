@@ -1,5 +1,9 @@
 # Build status: locally verified development build
 
+## Dependabot maintenance — 2026-09-08
+
+Configuration/documentation-only cleanup: weekly grouped minor/patch updates for npm and Actions, with routine majors deferred and security updates still eligible. Application dependencies and workflows are unchanged. This pass ran `npm audit --json` (0 vulnerabilities), `npm run verify` (strict TypeScript, 140 unit tests, 14 mocked gateway tests, production build passed), `npm run check:core` (71 passed), YAML validation against the downloaded Dependabot JSON Schema (passed), and `git diff --check` (passed). Browser/model suites were not rerun in this pass. See [the implementation log](IMPLEMENTATION-LOG.md#2026-09-08-dependabot-cleanup) for all ten PR dispositions, actual remote CI evidence, exact validation commands and remaining settings/Actions risks. No push, deployment or live Gemini calls.
+
 ## Phase 1 update — September 8, 2026
 
 **First-time UX and result clarity: COMPLETE; commit-ready.** Changes are left uncommitted for human review. Full change list, decisions, failure history and limitations: [IMPLEMENTATION-LOG](IMPLEMENTATION-LOG.md).
