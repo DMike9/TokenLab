@@ -20,11 +20,16 @@ export function vectorMetrics(a: number[], b: number[]) {
     }
     if (!aa || !bb)
         throw new Error('Similarity is undefined for a zero vector.');
-    return { cosine: clamp(dot / Math.sqrt(aa * bb), -1, 1), dot, euclidean: Math.sqrt(euclidean), manhattan };
+    const denominator = Math.sqrt(aa) * Math.sqrt(bb);
+    if (!denominator || ![dot, aa, bb, euclidean, manhattan, denominator].every(Number.isFinite))
+        throw new Error('Vector metrics exceed the finite numerical range.');
+    return { cosine: clamp(dot / denominator, -1, 1), dot, euclidean: Math.sqrt(euclidean), manhattan };
 }
 export function normalizeVector(vector: number[]): number[] {
+    if (!vector.length || vector.some(v => !Number.isFinite(v)))
+        throw new Error('Embedding vectors must be nonempty and finite.');
     const norm = Math.hypot(...vector);
-    if (!norm)
+    if (!norm || !Number.isFinite(norm))
         throw new Error('The embedding model returned a zero vector.');
     return vector.map(v => v / norm);
 }

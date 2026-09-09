@@ -1,18 +1,24 @@
 import type { Decision, Run } from './types.js';
 const redactDecision = ({ text: _text, ...decision }: Decision) => decision;
+function finiteData<T>(value: T): T {
+    if (typeof value === 'number' && !Number.isFinite(value)) return null as T;
+    if (Array.isArray(value)) return value.map(finiteData) as T;
+    if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, finiteData(v)])) as T;
+    return value;
+}
 export function exportData(runs: Run[], includeText: boolean) {
-    return { format: 'tokenlab-experiments', schemaVersion: 2, exportedAt: new Date().toISOString(), includesPromptText: includeText,
+    return finiteData({ format: 'tokenlab-experiments', schemaVersion: 2, exportedAt: new Date().toISOString(), includesPromptText: includeText,
         warning: 'Input hashes are identifiers, not anonymization. They can be guessed for known prompts.',
         experiments: runs.map(run => includeText ? run : ({ ...run, original: undefined, compressed: undefined,
             taskFocus: { ...run.taskFocus, text: undefined }, decisions: run.decisions.map(redactDecision),
             stages: run.stages.map(stage => ({ ...stage, decisions: stage.decisions.map(redactDecision) })),
             settings: { ...run.settings, protectedTerms: [] } })),
-    };
+    });
 }
 const csvCell = (value: unknown): string => {
-    let s = value == null ? '' : String(value);
+    let s = value == null || (typeof value === 'number' && !Number.isFinite(value)) ? '' : String(value);
     // Prevent spreadsheet formula execution in exported user-originated strings.
-    if (/^[=+@\-\t\r]/.test(s))
+    if (/^\s*[=+@\-]|^[\t\r\n]/.test(s))
         s = "'" + s;
     return '"' + s.replace(/"/g, '""') + '"';
 };

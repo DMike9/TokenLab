@@ -1,5 +1,37 @@
 # Build status: locally verified development build
 
+## Hardening Gate ? Post Phase 2 ? 2026-09-09
+
+**PASS for the experimental local application; commit-ready.** Twelve findings repaired (0 Critical, 2 High, 5 Medium, 5 Low); no unresolved Critical/High defect found in reviewed paths. Full findings, reproductions, residual limits and mutation evidence: [HARDENING-REPORT](HARDENING-REPORT.md). This is not Phase 3 or downstream research validation.
+
+| Command actually executed | Result |
+| --- | --- |
+| `npm ci` | Clean install passed: 109 packages added, 110 audited. An intermediate attempt hit EPERM because the local dev server held esbuild.exe; stopped this workspace's process and reran successfully. |
+| `npm audit --json`, initial / `npm install` | Initial two High entries through sharp; patched existing override 0.35.3?0.35.4 and regenerated its lock graph. No major upgrade. |
+| `npm run verify`, final | Strict TypeScript; **202/202 Vitest**; **20/20 mocked gateway**; production build, **49 modules**, 6.29 s. |
+| `npm run check:core` | **71/71** pure-engine contracts; character counters remain test seams. |
+| `npx playwright install chromium` | Successful; installed Chromium available for actual browser runs. |
+| `npm run test:e2e`, final | **26/26 passed**, 54.4 s, including nine hardening browser cases plus prior flows and all nine examples/63 experiments. |
+| `npm run test:model`, final | **3/3 passed**, 24.0 s, real downloads/local inference, finite normalized vectors, Unicode long tails, focus policies and keyboard chart selection. |
+| `npm run preview` | Served the actual production bundle at `http://127.0.0.1:4173/`. |
+| `$env:TOKENLAB_TEST_URL = 'http://127.0.0.1:4173'; npm run test:model -- --grep 'real public'` | **1/1 passed**, 9.2s, against the final production build; long example, similarity guard, hybrid, recorded model metadata and export. |
+| `npm audit`, final | **0 vulnerabilities**. |
+| `.cache/tiktoken-venv/Scripts/python.exe scripts/generate-hardening-fixture.py` | Generated 12 targeted independent tiktoken **0.14.0** fixtures. Together with 36 existing fixtures, exact IDs/decodes pass for all three encodings. |
+| `npm test -- tests/hardening.test.ts`, before/after repairs | Initially **7 failed / 5 passed**; final expanded suite is included in the 202 passing tests. No original tests removed or relaxed. |
+| `npm test -- tests/limits.test.ts` | Boundary checks passed; final suite also includes dense 60,000-code-unit protection reconstruction. |
+| `python .cache/mutate-hardening.py` | **7/7 mutations detected**; every source file restored byte-for-byte; final suites pass. Temporary helper is ignored. |
+| `node .cache/stress-chunks.mjs` | Dense 30,000-line chunking: local 5,795 ms before / 22.6 ms after. Local observation, not a benchmark. |
+| `node .cache/check-sharp-hardening.mjs` | sharp 0.35.4/libvips 8.18.6 successfully produced an 89-byte synthetic PNG; dependency smoke only. |
+| `git ls-remote` against six official Actions repos/tags | Verified same-major release SHAs; pinned workflows. Exact tag/SHA table in the report. |
+| `python .cache/audit-public.py` | Public tracked/new-file credential-pattern/path audit and both workflow YAML/permission/pin checks passed. Secret files were excluded without opening their contents. |
+| `git diff --check` | Passed; only existing Windows line-ending notices. |
+
+Real model: **Xenova/all-MiniLM-L6-v2**, **751bff37182d3f1213fa05d7196b954e230abad9**, q8/WASM, Transformers.js 3.8.1. Full-input tail cases used **7/5 windows**, cosine **0.5246208440170577**; this is an embedding proxy, not task-performance evidence. [Compact evidence](verification/hardening/evidence.json).
+
+Actual screenshots inspected: [1440?1000](verification/hardening/results-1440.png), [1024?768](verification/hardening/results-1024.png), [390?844](verification/hardening/results-390.png), [200% content zoom](verification/hardening/zoom-200.png). No page-wide overflow in these checks. The in-app browser connection returned `missing field sandboxPolicy`; installed Playwright Chromium supplied the evidence. Native browser-chrome zoom and manual screen readers were not tested. One redundant concurrent model rerun was interrupted when its test-owned server exited; the final suites ran against a stable separately started development server.
+
+No secrets inspected, Gemini calls, commit, push or deployment. Review the local diff and commit the intended source/tests/docs/lockfile together. Live Gemini, deployment, other browsers/devices, offline first use and full accessibility conformance remain unverified. All sections below are **dated historical results**, not current counts or dependency status.
+
 ## Phase 2 — Task focus and interpretable importance — 2026-09-08
 
 **COMPLETE; ready for human commit/push.** Auto/user-selected/legacy original-prompt focus, separate hard protection and soft features, contribution inspection, notebook comparison and schema-2 exports are implemented. Full audit, failure history, decisions and limitations: [Phase 2 implementation log](IMPLEMENTATION-LOG.md#phase-2--task-focus-and-interpretable-importance).

@@ -592,7 +592,7 @@ h1 span{
 }
 .result-metrics{
   display:grid;
-  grid-template-columns:1.1fr 1fr 1fr;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));
   gap:22px;
   align-items:center;
   margin:28px 0

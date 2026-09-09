@@ -2,11 +2,11 @@
 
 ## Execution path
 
-React creates a settings snapshot and sends a request to a dedicated browser worker. The worker lazily loads the selected tokenizer, optionally prepares the local embedding model, and invokes the modular strategy engine. It returns measurements and decision records. React renders the records; it does not invent salience or similarity values.
+React creates a settings snapshot (and the runner clones nested settings and method arrays before its first await) and sends a request to a dedicated browser worker. The worker lazily loads the selected tokenizer, optionally prepares the local embedding model, and invokes the modular strategy engine. It returns measurements and decision records. React renders the records; it does not invent salience or similarity values.
 
 Each strategy implements the shared `Strategy` interface: ID, name, description, optional warning and asynchronous `compress(text, context)`. The context injects exact token counting, settings and optional embedding inference. This separation permits pure tests without pretending a character counter is a production tokenizer.
 
-One worker queue processes requests serially. Cancellation terminates the worker and its model state. The optional Node gateway is a separate process and has no role in keyless experiments. The Vite dev/preview proxy routes only `/api` to it.
+One worker queue processes requests serially. A synchronous UI lock prevents same-tick duplicate starts. Operation generations invalidate cancelled/cleared continuations; worker identity and request IDs reject late messages/errors. Cancellation terminates the worker and its model state. Fatal worker errors also disable the draft embedding toggle, requiring initialization in the replacement worker. The optional Node gateway is a separate process and has no role in keyless experiments. The Vite dev/preview proxy routes only `/api` to it.
 
 ## Hard constraints, task focus and soft importance
 
@@ -93,4 +93,14 @@ There is no tool use, command execution, remote URL supplied by the client, arbi
 
 ## Intentional scope decisions
 
-This source contains the core engine/UI and an optional local Gemini harness. It does not contain a trained compression model, a Python LLMLingua runtime, production cloud infrastructure, NER guarantees, a proof of semantic preservation, a fabricated composite quality score, real benchmark results or a claim of a rendered/verified release. See BUILD-STATUS.
+This source contains the core engine/UI and an optional local Gemini harness. It does not contain a trained compression model, a Python LLMLingua runtime, production cloud infrastructure, NER guarantees, a proof of semantic preservation, a fabricated composite quality score, real benchmark results or a claim of a deployed release. Executed local browser/build checks are in BUILD-STATUS.
+
+## Post Phase 2 hardening details
+
+Engine evidence version is `tokenlab-0.2.1`; the application package/UI release label remains `0.1.0`/`0.1`. These are separate version identifiers. Settings validation rejects nonfinite controls even when a method does not use them; browser-run weights are in [0,1], temperature [.05,2], sigmoid steepness [1,20], n-gram size integer [1,5], occurrences integer [2,5], and thresholds/center [0,1]. Direct pure math tests can still use larger finite weights to isolate the denominator.
+
+Protection additionally covers adjacent/indented instruction clauses, identifier/filename patterns and full signed/currency/percentage numeric matches. Custom strings use literal, case-sensitive overlapping occurrences; duplicate declarations do not double-count. Whole valid JSON remains opaque. Original spans are sorted and traversed for chunk boundaries/reasons; repeated per-boundary full scans were removed. This is conservative pattern detection, not a language parser.
+
+Oversize editor changes are visibly rejected with the previous prompt retained. Paste applies the full accepted value once to avoid Chromium's pathological native insertion for many lines; CRLF/CR normalization matches ordinary textarea behavior. Engine strings/fixtures can still include raw CR and lone surrogates. UTF-8 tokenization and SHA-256 replace lone UTF-16 surrogates with U+FFFD, so these hashes do not distinguish every malformed JavaScript string.
+
+Every model window must produce a finite nonzero 384-dimensional vector before pooling. Vector metric overflow is an error. Export builders turn nonfinite numeric leaves into null/empty CSV cells; whitespace-prefixed formula markers are escaped. Rejected budgeted stages report the restored string's budget status. See the hardening report for evidence and residual limits.

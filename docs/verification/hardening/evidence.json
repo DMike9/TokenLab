@@ -1,0 +1,409 @@
+{
+  "scope": "Synthetic local verification; not benchmark results",
+  "date": "2026-09-09",
+  "mutations": [
+    {
+      "safeguard": "negation",
+      "detected": true,
+      "exitCode": 1
+    },
+    {
+      "safeguard": "budget",
+      "detected": true,
+      "exitCode": 1
+    },
+    {
+      "safeguard": "task-focus",
+      "detected": true,
+      "exitCode": 1
+    },
+    {
+      "safeguard": "token-count",
+      "detected": true,
+      "exitCode": 1
+    },
+    {
+      "safeguard": "redaction",
+      "detected": true,
+      "exitCode": 1
+    },
+    {
+      "safeguard": "stale-settings",
+      "detected": true,
+      "exitCode": 1
+    },
+    {
+      "safeguard": "final-guard",
+      "detected": true,
+      "exitCode": 1
+    }
+  ],
+  "denseChunkObservation": {
+    "utf16CodeUnits": 60000,
+    "chunks": 30000,
+    "beforeMs": 5795.0803,
+    "afterMs": 22.6364,
+    "beforeHeapMiB": 17.679,
+    "afterHeapMiB": 20.512,
+    "caveat": "single local Node observations, not performance benchmarks"
+  },
+  "tail-evidence": {
+    "revision": "751bff37182d3f1213fa05d7196b954e230abad9",
+    "aChunks": 7,
+    "bChunks": 5,
+    "cosine": 0.5246208440170577
+  },
+  "embedding-evidence": {
+    "errors": [],
+    "network": [],
+    "runs": [
+      {
+        "methods": [
+          "deduplicate"
+        ],
+        "encoding": "o200k_base",
+        "taskFocusPolicy": "auto",
+        "inputHash": "fe34801240c8fe9521684ae21b2d77b3f860ac8d595516a08e9e4e7a8a4c5ce7",
+        "metrics": {
+          "originalTokens": 372,
+          "compressedTokens": 169,
+          "savedTokens": 203,
+          "savingsPercent": 54.56989247311827,
+          "rate": 0.4543010752688172,
+          "factor": 2.201183431952663,
+          "originalCharacters": 2181,
+          "compressedCharacters": 977,
+          "removedCharacters": 1204,
+          "originalWords": 333,
+          "compressedWords": 151,
+          "removedWords": 182,
+          "protectedTotal": 14,
+          "protectedRetained": 14,
+          "protectionRate": 1
+        },
+        "similarity": {
+          "cosine": 0.7925736428889396,
+          "dot": 0.7925736428889396,
+          "euclidean": 0.6440906102576869,
+          "manhattan": 9.850315342094756,
+          "model": "Xenova/all-MiniLM-L6-v2",
+          "revision": "751bff37182d3f1213fa05d7196b954e230abad9",
+          "dtype": "q8",
+          "originalChunks": 2,
+          "compressedChunks": 1,
+          "aggregation": "model-token-weighted mean of normalized \u2264254-wordpiece chunk embeddings, followed by L2 normalization",
+          "elapsedMs": 609
+        }
+      },
+      {
+        "methods": [
+          "similarity"
+        ],
+        "encoding": "o200k_base",
+        "taskFocusPolicy": "auto",
+        "inputHash": "89eef511b4c13d1dc801cb698768af23f88e7caa8934e2dbc4d89da08740ba31",
+        "metrics": {
+          "originalTokens": 54,
+          "compressedTokens": 45,
+          "savedTokens": 9,
+          "savingsPercent": 16.666666666666664,
+          "rate": 0.8333333333333334,
+          "factor": 1.2,
+          "originalCharacters": 297,
+          "compressedCharacters": 251,
+          "removedCharacters": 46,
+          "originalWords": 46,
+          "compressedWords": 39,
+          "removedWords": 7,
+          "protectedTotal": 8,
+          "protectedRetained": 8,
+          "protectionRate": 1
+        },
+        "similarity": {
+          "cosine": 0.9857427961400761,
+          "dot": 0.9857427961400755,
+          "euclidean": 0.1688620967530863,
+          "manhattan": 2.580690959580079,
+          "model": "Xenova/all-MiniLM-L6-v2",
+          "revision": "751bff37182d3f1213fa05d7196b954e230abad9",
+          "dtype": "q8",
+          "originalChunks": 1,
+          "compressedChunks": 1,
+          "aggregation": "model-token-weighted mean of normalized \u2264254-wordpiece chunk embeddings, followed by L2 normalization",
+          "elapsedMs": 0.10000000009313226
+        }
+      },
+      {
+        "methods": [
+          "hybrid"
+        ],
+        "encoding": "o200k_base",
+        "taskFocusPolicy": "auto",
+        "inputHash": "7c4a6a645d270b297f70341c8266673846f43bfa86b2acbda1c3ff363efd2c3b",
+        "metrics": {
+          "originalTokens": 81,
+          "compressedTokens": 17,
+          "savedTokens": 64,
+          "savingsPercent": 79.01234567901234,
+          "rate": 0.20987654320987653,
+          "factor": 4.764705882352941,
+          "originalCharacters": 471,
+          "compressedCharacters": 95,
+          "removedCharacters": 376,
+          "originalWords": 70,
+          "compressedWords": 13,
+          "removedWords": 57,
+          "protectedTotal": 5,
+          "protectedRetained": 5,
+          "protectionRate": 1
+        },
+        "similarity": {
+          "cosine": 0.4020448328004692,
+          "dot": 0.4020448328004695,
+          "euclidean": 1.0935768534488377,
+          "manhattan": 17.032118976791367,
+          "model": "Xenova/all-MiniLM-L6-v2",
+          "revision": "751bff37182d3f1213fa05d7196b954e230abad9",
+          "dtype": "q8",
+          "originalChunks": 1,
+          "compressedChunks": 1,
+          "aggregation": "model-token-weighted mean of normalized \u2264254-wordpiece chunk embeddings, followed by L2 normalization",
+          "elapsedMs": 97.1999999997206
+        }
+      }
+    ]
+  },
+  "focus-embedding-evidence": {
+    "errors": [],
+    "network": [],
+    "runs": [
+      {
+        "methods": [
+          "hybrid"
+        ],
+        "encoding": "o200k_base",
+        "taskFocusPolicy": "auto",
+        "inputHash": "4276394b4dbd84ff3014f6319617259b313cfe4fd653d3881f39129776268110",
+        "metrics": {
+          "originalTokens": 49,
+          "compressedTokens": 30,
+          "savedTokens": 19,
+          "savingsPercent": 38.775510204081634,
+          "rate": 0.6122448979591837,
+          "factor": 1.6333333333333333,
+          "originalCharacters": 271,
+          "compressedCharacters": 174,
+          "removedCharacters": 97,
+          "originalWords": 39,
+          "compressedWords": 25,
+          "removedWords": 14,
+          "protectedTotal": 1,
+          "protectedRetained": 1,
+          "protectionRate": 1
+        },
+        "similarity": {
+          "cosine": 0.9693033321447896,
+          "dot": 0.9693033321447896,
+          "euclidean": 0.24777678606039935,
+          "manhattan": 3.931476782136075,
+          "model": "Xenova/all-MiniLM-L6-v2",
+          "revision": "751bff37182d3f1213fa05d7196b954e230abad9",
+          "dtype": "q8",
+          "originalChunks": 1,
+          "compressedChunks": 1,
+          "aggregation": "model-token-weighted mean of normalized \u2264254-wordpiece chunk embeddings, followed by L2 normalization",
+          "elapsedMs": 82.29999999981374
+        }
+      },
+      {
+        "methods": [
+          "hybrid"
+        ],
+        "encoding": "o200k_base",
+        "taskFocusPolicy": "legacy",
+        "inputHash": "4276394b4dbd84ff3014f6319617259b313cfe4fd653d3881f39129776268110",
+        "metrics": {
+          "originalTokens": 49,
+          "compressedTokens": 21,
+          "savedTokens": 28,
+          "savingsPercent": 57.14285714285714,
+          "rate": 0.42857142857142855,
+          "factor": 2.3333333333333335,
+          "originalCharacters": 271,
+          "compressedCharacters": 130,
+          "removedCharacters": 141,
+          "originalWords": 39,
+          "compressedWords": 18,
+          "removedWords": 21,
+          "protectedTotal": 1,
+          "protectedRetained": 1,
+          "protectionRate": 1
+        },
+        "similarity": {
+          "cosine": 0.8390176353352429,
+          "dot": 0.8390176353352429,
+          "euclidean": 0.567419359318586,
+          "manhattan": 8.99453073492814,
+          "model": "Xenova/all-MiniLM-L6-v2",
+          "revision": "751bff37182d3f1213fa05d7196b954e230abad9",
+          "dtype": "q8",
+          "originalChunks": 1,
+          "compressedChunks": 1,
+          "aggregation": "model-token-weighted mean of normalized \u2264254-wordpiece chunk embeddings, followed by L2 normalization",
+          "elapsedMs": 24.5
+        }
+      },
+      {
+        "methods": [
+          "hybrid"
+        ],
+        "encoding": "o200k_base",
+        "taskFocusPolicy": "user",
+        "inputHash": "4276394b4dbd84ff3014f6319617259b313cfe4fd653d3881f39129776268110",
+        "metrics": {
+          "originalTokens": 49,
+          "compressedTokens": 30,
+          "savedTokens": 19,
+          "savingsPercent": 38.775510204081634,
+          "rate": 0.6122448979591837,
+          "factor": 1.6333333333333333,
+          "originalCharacters": 271,
+          "compressedCharacters": 174,
+          "removedCharacters": 97,
+          "originalWords": 39,
+          "compressedWords": 25,
+          "removedWords": 14,
+          "protectedTotal": 1,
+          "protectedRetained": 1,
+          "protectionRate": 1
+        },
+        "similarity": {
+          "cosine": 0.9693033321447896,
+          "dot": 0.9693033321447896,
+          "euclidean": 0.24777678606039935,
+          "manhattan": 3.931476782136075,
+          "model": "Xenova/all-MiniLM-L6-v2",
+          "revision": "751bff37182d3f1213fa05d7196b954e230abad9",
+          "dtype": "q8",
+          "originalChunks": 1,
+          "compressedChunks": 1,
+          "aggregation": "model-token-weighted mean of normalized \u2264254-wordpiece chunk embeddings, followed by L2 normalization",
+          "elapsedMs": 0.20000000018626451
+        }
+      }
+    ]
+  },
+  "productionPreview": {
+    "url": "http://127.0.0.1:4173/",
+    "test": "real public model downloads and browser-worker inference",
+    "errors": [],
+    "network": [],
+    "runs": [
+      {
+        "methods": [
+          "deduplicate"
+        ],
+        "metrics": {
+          "originalTokens": 372,
+          "compressedTokens": 169,
+          "savedTokens": 203,
+          "savingsPercent": 54.56989247311827,
+          "rate": 0.4543010752688172,
+          "factor": 2.201183431952663,
+          "originalCharacters": 2181,
+          "compressedCharacters": 977,
+          "removedCharacters": 1204,
+          "originalWords": 333,
+          "compressedWords": 151,
+          "removedWords": 182,
+          "protectedTotal": 14,
+          "protectedRetained": 14,
+          "protectionRate": 1
+        },
+        "similarity": {
+          "cosine": 0.7925736428889396,
+          "dot": 0.7925736428889396,
+          "euclidean": 0.6440906102576869,
+          "manhattan": 9.850315342094756,
+          "model": "Xenova/all-MiniLM-L6-v2",
+          "revision": "751bff37182d3f1213fa05d7196b954e230abad9",
+          "dtype": "q8",
+          "originalChunks": 2,
+          "compressedChunks": 1,
+          "aggregation": "model-token-weighted mean of normalized \u2264254-wordpiece chunk embeddings, followed by L2 normalization",
+          "elapsedMs": 644
+        }
+      },
+      {
+        "methods": [
+          "similarity"
+        ],
+        "metrics": {
+          "originalTokens": 54,
+          "compressedTokens": 45,
+          "savedTokens": 9,
+          "savingsPercent": 16.666666666666664,
+          "rate": 0.8333333333333334,
+          "factor": 1.2,
+          "originalCharacters": 297,
+          "compressedCharacters": 251,
+          "removedCharacters": 46,
+          "originalWords": 46,
+          "compressedWords": 39,
+          "removedWords": 7,
+          "protectedTotal": 8,
+          "protectedRetained": 8,
+          "protectionRate": 1
+        },
+        "similarity": {
+          "cosine": 0.9857427961400761,
+          "dot": 0.9857427961400755,
+          "euclidean": 0.1688620967530863,
+          "manhattan": 2.580690959580079,
+          "model": "Xenova/all-MiniLM-L6-v2",
+          "revision": "751bff37182d3f1213fa05d7196b954e230abad9",
+          "dtype": "q8",
+          "originalChunks": 1,
+          "compressedChunks": 1,
+          "aggregation": "model-token-weighted mean of normalized \u2264254-wordpiece chunk embeddings, followed by L2 normalization",
+          "elapsedMs": 0.20000000018626451
+        }
+      },
+      {
+        "methods": [
+          "hybrid"
+        ],
+        "metrics": {
+          "originalTokens": 81,
+          "compressedTokens": 17,
+          "savedTokens": 64,
+          "savingsPercent": 79.01234567901234,
+          "rate": 0.20987654320987653,
+          "factor": 4.764705882352941,
+          "originalCharacters": 471,
+          "compressedCharacters": 95,
+          "removedCharacters": 376,
+          "originalWords": 70,
+          "compressedWords": 13,
+          "removedWords": 57,
+          "protectedTotal": 5,
+          "protectedRetained": 5,
+          "protectionRate": 1
+        },
+        "similarity": {
+          "cosine": 0.4020448328004692,
+          "dot": 0.4020448328004695,
+          "euclidean": 1.0935768534488377,
+          "manhattan": 17.032118976791367,
+          "model": "Xenova/all-MiniLM-L6-v2",
+          "revision": "751bff37182d3f1213fa05d7196b954e230abad9",
+          "dtype": "q8",
+          "originalChunks": 1,
+          "compressedChunks": 1,
+          "aggregation": "model-token-weighted mean of normalized \u2264254-wordpiece chunk embeddings, followed by L2 normalization",
+          "elapsedMs": 91.6999999997206
+        }
+      }
+    ]
+  }
+}

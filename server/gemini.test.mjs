@@ -29,3 +29,33 @@ test('oversized prompt or request is rejected',async t=>{const {url,calls}=await
 test('missing configuration never makes a paid request',async t=>{const {url,calls}=await setup(t,{key:''});assert.equal((await post(url)).status,503);assert.equal(calls.length,0);});
 test('provider failure does not leak its body or key; second request is not made',async t=>{let count=0;const {url}=await setup(t,{fetchImpl:async()=>{count++;return new Response('sensitive provider error',{status:403});}});const r=await post(url);const text=await r.text();assert.equal(r.status,502);assert.equal(text.includes('sensitive provider'),false);assert.equal(text.includes('FAKE_TEST'),false);assert.equal(count,1);});
 test('local rolling budget stops additional calls',async t=>{const {url,calls}=await setup(t,{maxPairsPerMinute:1});assert.equal((await post(url)).status,200);assert.equal((await post(url)).status,429);assert.equal(calls.length,2);});
+
+test('unexpected/prototype fields and missing prompts fail before generation', async t => {
+ const {url,calls}=await setup(t);
+ for (const body of [{}, [], {original:'x'}, {...BODY, model:'other'}, JSON.parse('{"__proto__":{},"original":"x","compressed":"y"}')]) assert.equal((await post(url,body)).status,400);
+ assert.equal(calls.length,0);
+});
+test('prompt and reference boundaries MAX-1/MAX/MAX+1', async t => {
+ const {url,calls}=await setup(t,{maxPairsPerMinute:20});
+ for (const n of [19999,20000,20001]) assert.equal((await post(url,{...BODY,original:'x'.repeat(n)})).status,n>20000?400:200);
+ for (const n of [3999,4000,4001]) assert.equal((await post(url,{...BODY,expected:'x'.repeat(n)})).status,n>4000?400:200);
+ assert.equal(calls.length,8);
+});
+test('concurrent pairs cannot bypass the in-flight lock', async t => {
+ let release, started; const ready=new Promise(r=>started=r); const held=new Promise(r=>release=r); let calls=0;
+ const {url}=await setup(t,{fetchImpl:async()=>{calls++; if(calls===1){started();await held;} return mockResponse();}});
+ const first=post(url); await ready; assert.equal((await post(url)).status,429); release(); assert.equal((await first).status,200); assert.equal(calls,2);
+});
+test('provider timeout, 4xx/5xx, invalid JSON and malformed structures are sanitized', async t => {
+ for (const response of [()=>{throw Error('FAKE_TEST sensitive stack');},()=>new Response('FAKE_TEST',{status:429}),()=>new Response('FAKE_TEST',{status:500}),()=>new Response('{'),()=>Response.json(null),()=>Response.json({}),()=>Response.json({candidates:[{content:{parts:{}}}]}),()=>Response.json({candidates:[{content:{parts:[null]}}]})]) {
+  const {url}=await setup(t,{fetchImpl:async()=>response()}); const r=await post(url); assert.equal(r.status,502); const body=await r.text(); assert.ok(!body.includes('FAKE_TEST')); assert.ok(!body.includes('stack'));
+ }
+});
+test('failure after first successful call is visible and never retried', async t => {
+ let count=0; const {url}=await setup(t,{fetchImpl:async()=>++count===1?mockResponse():new Response('private',{status:500})});
+ const r=await post(url);assert.equal(r.status,502);assert.equal(count,2);assert.ok(!(await r.text()).includes('private'));
+});
+test('safety blocked outputs and absent usage remain explicit', async t => {
+ const {url}=await setup(t,{fetchImpl:async()=>Response.json({promptFeedback:{blockReason:'SAFETY'}})});
+ const r=await post(url);const data=await r.json();assert.equal(r.status,200);assert.equal(data.original.text,'');assert.equal(data.original.finishReason,'SAFETY');assert.deepEqual(data.original.usage,{});assert.equal(data.original.exactMatch,false);
+});

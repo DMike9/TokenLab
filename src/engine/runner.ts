@@ -7,12 +7,17 @@ import { protectionRetention } from './protection.js';
 import { vectorMetrics } from './math.js';
 import { DTYPE, MODEL, embedText, modelRevision } from '../similarity/embedding.js';
 import { resolveTaskFocus } from './taskFocus.js';
-export const ENGINE_VERSION = 'tokenlab-0.2.0';
+import { validateSettings } from './settings.js';
+export const ENGINE_VERSION = 'tokenlab-0.2.1';
 export async function hashText(text: string): Promise<string> {
     const buffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
     return Array.from(new Uint8Array(buffer), b => b.toString(16).padStart(2, '0')).join('');
 }
 export async function runExperiment(original: string, methods: Method[], settings: Settings, progress: (text: string) => void): Promise<Run> {
+    // Capture caller-owned arrays/objects before any asynchronous dependency work.
+    settings = structuredClone(settings);
+    methods = [...methods];
+    validateSettings(settings);
     if (original.length > MAX_CHARACTERS)
         throw new Error(`Input exceeds ${MAX_CHARACTERS.toLocaleString()} UTF-16 code units. Shorten it before running.`);
     if (!methods.length || methods.length > 8)
@@ -38,7 +43,8 @@ export async function runExperiment(original: string, methods: Method[], setting
         if (protectedStatus.retained < protectedStatus.total || tokenizer.count(current) > tokenizer.count(before)) {
             current = before;
             decisions = [];
-            budgetMet = null;
+            budgetMet = ['importance', 'hybrid', 'similarity'].includes(method)
+                ? tokenizer.count(before) <= Math.floor(tokenizer.count(before) * settings.budget) : null;
             out.notes.push('Candidate rejected by the final guard: an original protected occurrence was lost or token count increased. Prior text restored.');
         }
         notes.push(...out.notes);

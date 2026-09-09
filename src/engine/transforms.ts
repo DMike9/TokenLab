@@ -17,10 +17,12 @@ export const TRANSFORMS: {
 export function transformScores(scores: number[], settings: Pick<Settings, 'transform' | 'temperature' | 'steepness' | 'center'>): number[] {
     if (scores.some(v => !Number.isFinite(v) || v < 0 || v > 1))
         throw new Error('Importance scores must be finite values in [0, 1].');
-    if (!scores.length)
-        return [];
+    if (!Number.isFinite(settings.steepness) || settings.steepness <= 0 || !Number.isFinite(settings.center) || settings.center < 0 || settings.center > 1)
+        throw new Error('Sigmoid steepness must be positive and finite; center must be in [0, 1].');
     if (!(settings.temperature > 0) || !Number.isFinite(settings.temperature))
         throw new Error('Temperature must be positive and finite.');
+    if (!scores.length)
+        return [];
     if (settings.transform === 'softmax') {
         const maximum = Math.max(...scores);
         const exps = scores.map(x => Math.exp((x - maximum) / settings.temperature));

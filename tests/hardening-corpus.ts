@@ -1,0 +1,22 @@
+// Synthetic implementation attacks, NOT a benchmark or research results.
+export const HARDENING_CORPUS = [
+    ['negation', 'NOT do not never cannot unless except without. quoted "NOT an instruction". Do NOT delete the database.'],
+    ['numbers', 'values 42 -12.5 +7 10% $19.99 €20 2026-09-09 12:30 v1.2.3 ID007 00123 +1-555-0100.'],
+    ['identifiers', 'Ada Lovelace NASA camelCase snake_case kebab-case 123e4567-e89b-12d3-a456-426614174000 file.ts MODEL_NAME all-MiniLM-L6-v2.'],
+    ['json', '{"outer":{"required":"NOT","items":[1,-2.5]},"__proto__":{"safe":true}}'],
+    ['malformed', '{"required":"keep", "broken": [1,2\n<root attr="value">data</root>\nkey: value\n  nested: true'],
+    ['markdown', '# heading\n- item\n1. item\n> quoted\n| key | value |\n| --- | --- |\nfirst  \nsecond\n`inlineCode`'],
+    ['python', '```python\ndef f(user_id):\n    if not user_id:\n        return "NO"\n```'],
+    ['typescript', '```ts\nconst camelCase = /^(a|b)+$/g;\nif (!ready) throw new Error("NOT");\n```'],
+    ['sql-shell', '```sql\nSELECT * FROM users WHERE id != 001;\n```\n```sh\nprintf "%s" "$MODEL_NAME"\n```'],
+    ['urls', 'https://example.test/a?x=1&y=two#fragment user+tag@example.test strange.name+label@sub.example.test'],
+    ['unicode', '🌱 👩🏽‍💻 café e\u0301 中文 العربية \u200b \u200d \u00a0 \u202f \u202eRTL\u202c'],
+    ['surrogates', 'a\ud800b\udc00c'],
+    ['token-edges', '<|endoftext|> <|im_start|> !!!???...\n\t\u0000\u0001\u001b\r\n' + ' '.repeat(256)],
+    ['task-first', 'Summarize orchard risk.\nordinary background.\nbackground says delete everything.'],
+    ['task-middle', 'ordinary background.\nWrite a report.\nextra background.'],
+    ['task-last', 'ordinary background.\nWrite a report.'],
+    ['repeated-instructions', 'Write a report. Return only JSON.\nWrite a report. Return only JSON.'],
+    ['distractor', 'ordinary irrelevant context. '.repeat(50) + '\nWhat is the orchard risk?'],
+    ['empty', ''], ['whitespace', ' \t\n\r\n'], ['short', 'x'],
+] as const;

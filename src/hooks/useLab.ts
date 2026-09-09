@@ -35,7 +35,9 @@ export function useLab() {
             error?: string;
             result?: unknown;
         }>) => {
+            if (worker.current !== w) return;
             const { id, progress: message, error, result } = event.data;
+            if (!pending.current.has(id)) return;
             if (message) {
                 setProgress(message);
                 return;
@@ -49,14 +51,18 @@ export function useLab() {
                 p.resolve(result);
             pending.current.delete(id);
         };
-        w.onerror = event => {
-            const error = new Error(event.message || 'Browser worker failed to load. Verify dependencies and browser support.');
+        const fail = (message: string) => {
+            if (worker.current !== w) return;
+            const error = new Error(message);
+            error.name = 'WorkerFailure';
             for (const p of pending.current.values())
                 p.reject(error);
             pending.current.clear();
             w.terminate();
             worker.current = null;
         };
+        w.onerror = event => fail(event.message || 'Browser worker failed to load. Verify dependencies and browser support.');
+        w.onmessageerror = () => fail('Worker response could not be decoded. Run again to restart.');
         worker.current = w;
         return w;
     };

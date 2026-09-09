@@ -6,6 +6,8 @@ The optional Gemini gateway sends authorized prompt pairs to Google. It reads `.
 
 Never put an API key in React source, a `VITE_` variable, screenshots, a pasted terminal transcript, a repository or an export. Do not ask an agent to print environment files. Rotate exposed keys and review provider usage. No telemetry, third-party fonts, analytics or automatic remote prompt submission are added.
 
-Do not open a public issue containing prompts, personal information, credentials or exploitable deployment details. No private reporting address has been configured for this unpublished project; the maintainer should enable a private vulnerability-reporting channel before a public launch. Do not invent a reporting address.
+Do not open a public issue containing prompts, personal information, credentials or exploitable deployment details. No private reporting address has been configured for this project; the maintainer should enable a private vulnerability-reporting channel before a public launch. Do not invent a reporting address.
 
 For a future public AI backend, require separate authentication, per-user authorization/quotas, provider-side billing controls, secure secret storage, abuse prevention, appropriate logging without prompt leaks, incident handling and a documented data policy. The current local gateway is not that backend.
+
+The hardening review and executed local checks are recorded in [docs/HARDENING-REPORT.md](docs/HARDENING-REPORT.md). Synthetic fault-injection tests and local model tests are separate; no gateway tests use a real key. Clearing the session also resets the text-export opt-in. Public model-download caches may remain, and exported hashes are not anonymization.

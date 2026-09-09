@@ -307,3 +307,59 @@ Normalized obsolete handoff/status language and repaired links after screenshot 
 Validation during this audit: `.cache/validate-hygiene.py` verified all **17 source/test file hashes unchanged**, measurement projections against original captures, input hashes against the built-in example, contribution sums and protection invariants, relative links in all five changed documents, and **13 ignored-path probes**. `.gitignore` already covers node_modules, dist, secret environment files (retaining the template exception), browser/model/Python caches under `.cache`, core/test build output, coverage, Playwright reports/results, logs and macOS metadata; no ignore changes were necessary.
 
 Credential-pattern and personal-path scans returned no findings. PNG inspection found no text/EXIF metadata; the three retained screenshots were visually inspected and contain only the running synthetic-example UI. Ignored environment files and credentials were not opened. Final staged-content/path scan of all 28 files and the full cached diff found no credential/personal-path matches or local-only artifacts; `git diff --cached --check` passed. No application suites were rerun because source, tests and configuration are unchanged from the verified Phase 2 build. No commit, push, deployment or live Gemini calls occurred in this audit.
+
+## Hardening Gate ? Post Phase 2
+
+Status: PASS
+Date: 2026-09-09
+Commit-ready: YES
+
+### Audit findings
+
+Twelve repaired findings: 0 Critical, 2 High, 5 Medium, 5 Low. [HARDENING-REPORT](HARDENING-REPORT.md) records severity, observed behavior, risk, reproduction, fix, regression and residual limitation for each. No unresolved Critical/High defect is known from the reviewed paths. The report was started with actual source architecture/trust boundaries before implementation changes.
+
+### Repairs
+
+Fixed adjacent instruction detection, overlapping/duplicate literal protection and identifier ablation; entry-time run snapshots, UI operation generations and worker callback identity checks; nonfinite settings/math/vector validation; capped-token labeling; export numerical/formula defenses and opt-in reset; rejected-stage budget labeling; dense chunking and full-value paste; zoom overflow; gateway schema/error handling. Updated only the existing sharp override to 0.35.4 and pinned six Actions to verified same-major releases. Engine evidence version is 0.2.1; application package version remains 0.1.0.
+
+### Files changed
+
+- Engine: chunks, protection, runner, scoring, math, transforms, export, and new settings validation.
+- Runtime/UI: App, useLab, ResultContext, TokenInspector, tokenizer adapter, embedding validation, extracted embedding-window function, and one metric-grid CSS rule.
+- Gateway source/mocked tests; package manifest/real lockfile; CI/Pages Action pins; Python/cache ignores.
+- Tests: hardening corpus/contracts/limits/model-failure tests; targeted independent fixture/generator; hardening browser tests; stronger real-model tests and tokenizer fixtures.
+- README, START-HERE, SECURITY, ARCHITECTURE, ROADMAP, BUILD-STATUS, this log, new HARDENING-REPORT and curated verification/hardening evidence.
+
+### Tests added/strengthened
+
+21 synthetic adversarial cases ? 7 strategies ? 3 actual encodings = 441 implementation attacks inside three aggregate tests. These are NOT the Phase 3 benchmark dataset. The overall Vitest suite grew from 164 to 202, gateway from 14 to 20 and ordinary browser suite from 17 to 26. Existing assertions remain. Added 12 independent tiktoken fixtures, bringing the fixture total to 48. Vector/counter/transport seams are explicitly labeled and separate from actual BPE/model inference.
+
+### Verification
+
+Final `npm ci`, `npm run verify` (202 Vitest, 20 gateway, TypeScript, production build), `npm run check:core` (71), `npm run test:e2e` (26), `npm run test:model` (3), `npm audit` (zero) and `git diff --check` passed. Production preview model/UI/export smoke passed 1/1 on the final bundle. Exact commands/timings are in BUILD-STATUS. No paid calls.
+
+Initial hardening tests failed 7/12 before fixes. New numerical validation exposed floating-point feature overshoot; clipping at analytical bounds fixed the cause. Browser tests exposed content-zoom overflow and Chromium native multiline insertion; the repaired test uses the actual clipboard path with the same maximum-input assertion. Windows clipboard CRLF is normalized as by native textareas. A clean install failed EPERM while dev held esbuild; after stopping only the workspace process, it passed. A redundant parallel model rerun lost its test-owned dev server and was interrupted; final tests used a stable separately managed server. Failure history is retained instead of calling these attempts successful.
+
+### Browser checks
+
+Inspected actual 1440?1000, 1024?768, 390?844 and 200% content-zoom captures. Tested keyboard tabs/details/token pages/measured chart points, stale controls, quick clicks, cancellation/clear/restart/late messages, download failure, XSS text, export scopes, huge paste, all examples and real model-enabled methods. The in-app browser connection failed; Playwright Chromium was the documented fallback. Native browser UI zoom, physical devices and manual screen readers remain unverified.
+
+### Security/privacy checks
+
+No credential-pattern findings or tracked/historical secret environment paths in the scoped public-file audit. No secret contents opened. No prompt persistence, unsafe HTML rendering or core remote inference path found. Explicit consent remains required for optional Gemini, which was mocked only. sharp patch/native smoke and zero audit passed. Action tag/SHA identity, YAML and permissions were checked; remote CI/deployment was not run. Curated evidence contains synthetic prompts/measurements only.
+
+### Mutation evidence
+
+Seven temporary faults (negation, budget, task-focus tie, token count, redaction, stale settings and final guard) each caused a focused test failure. Source bytes were restored in finally blocks and hashes verified after each mutation. No broken source or heavy mutation framework retained.
+
+### Remaining limitations
+
+Conservative/incomplete English protection and focus; greedy scoring; embedding proxy/long-input pooling; metadata is not anonymous; multiline terms supported only by engine API; no raw vocabulary bytes/replay. Other browsers, native zoom, manual screen readers, offline first use, public hosting and live Gemini remain unverified. Limits and residual caveats are explicit in the report; no unsupported task-preservation or optimum claim.
+
+### Deferred
+
+Phase 3 datasets/evaluation, live Gemini, LLMLingua, new compression algorithms, composite scores, import/replay, cloud infrastructure and deployment. No commit, push or deployment occurred in this gate.
+
+### Gate recommendation
+
+**PASS. SAFE TO COMMIT/PUSH after human review.** This recommends the local change set for the experimental project; it does not perform a push or authorize deployment. Stop after this hardening gate.

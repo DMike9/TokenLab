@@ -14,7 +14,7 @@ export async function getTokenizer(encoding: Encoding): Promise<Tokenizer> {
     const cached = cache.get(encoding);
     if (cached)
         return cached;
-    if (!modules[encoding])
+    if (!Object.hasOwn(modules, encoding))
         throw new Error('Unsupported encoding.');
     const codec = await modules[encoding]();
     // The lab treats pasted special-token-looking strings as ordinary literal text.

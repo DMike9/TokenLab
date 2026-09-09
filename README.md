@@ -10,7 +10,7 @@ TokenLab can compare different definitions of task relevance against the same or
 
 **Implemented:** exact BPE counting, transparent compression heuristics, protected-content checks, recorded result settings, visual diffs, scoped exports and local embedding measurements. **Still research:** whether compression preserves downstream task correctness. Cosine is not accuracy; protected-string retention is not complete meaning preservation. Trained compressors, benchmark datasets and a composite quality score are not implemented.
 
-Implementation, debugging and test development used substantial AI assistance. This is an experimental portfolio project, with no claim of university or employer sponsorship or scientific validation. [Build evidence](docs/BUILD-STATUS.md) and the [implementation log](docs/IMPLEMENTATION-LOG.md) distinguish executed checks from future work.
+Implementation, debugging and test development used substantial AI assistance. This is an experimental portfolio project, with no claim of university or employer sponsorship or scientific validation. [Build evidence](docs/BUILD-STATUS.md), the [hardening report](docs/HARDENING-REPORT.md) and the [implementation log](docs/IMPLEMENTATION-LOG.md) distinguish executed checks from future work.
 
 To try it locally with Node 22.12+: run `npm ci`, then `npm run dev`, and open **http://127.0.0.1:5173/**. No API key is needed.
 
@@ -99,7 +99,7 @@ Detected negations, numeric strings, exact user-protected text, instructions, qu
 
 If protection requires more tokens than the target, the result explicitly says the budget could not be met. Candidate budgets use actual tokenization of the reconstructed text, not the sum of individual chunk counts. The selector is greedy and can leave budget unused.
 
-The maximum input is 60,000 UTF-16 code units. Additional method-specific chunk limits keep browser work bounded: redundancy 1,500; importance 512; model-assisted hybrid 64; similarity guard 96; embedding aggregation 128 windows. Some long inputs can be counted but cannot use every method. Limits yield errors rather than silently dropping the rest of the input.
+The maximum input is 60,000 UTF-16 code units. Oversize editor changes show an error and retain the previous prompt; pasted line endings follow native textarea normalization. Additional method-specific chunk limits keep browser work bounded: redundancy 1,500; importance 512; model-assisted hybrid 64; similarity guard 96; embedding aggregation 128 windows. Some long inputs can be counted but cannot use every method. Limits yield errors rather than silently dropping the rest of the input.
 
 Independent runs always start from the original. Chains run the selected operations in order. A budget-consuming stage's percentage is relative to **that stage's input**; applying budget selection twice can compound reductions. Final counts/diff/similarity still compare with the original. Score explanations belong to the last stage, as labeled.
 

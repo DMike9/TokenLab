@@ -4,6 +4,10 @@ dist/
 .env.*
 !.env.example
 .cache/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
 .core-check/
 .vitest/
 coverage/

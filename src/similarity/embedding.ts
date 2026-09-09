@@ -1,3 +1,4 @@
+import { embeddingWindows } from './windows.js';
 import type { FeatureExtractionPipeline } from '@huggingface/transformers';
 import { normalizeVector } from '../engine/math.js';
 export const MODEL = 'Xenova/all-MiniLM-L6-v2';
@@ -83,43 +84,14 @@ export async function embedText(text: string): Promise<{
         const encoded = model.tokenizer(part, { add_special_tokens: false, truncation: false, padding: false });
         return encoded.input_ids.data.length;
     };
-    // Count with the EMBEDDING model's tokenizer, not the GPT encoding. Preserve the exact input substrings.
-    // Binary search chooses a safe prefix; the explicit final token check prevents silent truncation.
-    const codepoints = Array.from(text), pieces: {
-        text: string;
-        weight: number;
-    }[] = [];
-    let at = 0;
-    while (at < codepoints.length) {
-        if (pieces.length >= 128)
-            throw new Error('This input exceeds the local embedding limit of 128 chunks. No truncated score was computed.');
-        let lo = 1, hi = Math.min(codepoints.length - at, 2048), best = 0, length = 0;
-        while (lo <= hi) {
-            const middle = Math.floor((lo + hi) / 2), part = codepoints.slice(at, at + middle).join('');
-            const tokens = tokenLength(part);
-            if (tokens <= 254) {
-                best = middle;
-                length = tokens;
-                lo = middle + 1;
-            }
-            else
-                hi = middle - 1;
-        }
-        if (!best)
-            throw new Error('A chunk could not be encoded safely within the model window.');
-        const part = codepoints.slice(at, at + best).join('');
-        if (tokenLength(part) > 254)
-            throw new Error('Chunk would be truncated; similarity was not computed.');
-        if (part.trim() && length)
-            pieces.push({ text: part, weight: length });
-        at += best;
-    }
-    if (!pieces.length)
-        throw new Error('The embedding tokenizer produced no content tokens.');
+    const pieces = embeddingWindows(text, tokenLength);
     let weighted: number[] | undefined;
     for (const piece of pieces) {
         const output = await model(piece.text, { pooling: 'mean', normalize: true });
         const vector = Array.from(output.data, Number);
+        if (vector.length !== 384 || vector.some(v => !Number.isFinite(v)))
+            throw new Error('Local model returned invalid dimensions or nonfinite vector values; similarity was not computed.');
+        normalizeVector(vector); // Also reject a zero vector before pooling can conceal it.
         if (!weighted)
             weighted = vector.map(() => 0);
         for (let i = 0; i < vector.length; i++)

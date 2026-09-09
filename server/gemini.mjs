@@ -26,6 +26,7 @@ async function readInput(req) {
  let data;
  try { data = JSON.parse(Buffer.concat(buffers).toString('utf8')); } catch { throw new RequestError(400, 'Invalid JSON request.'); }
  if (!data || typeof data !== 'object' || Array.isArray(data)) throw new RequestError(400,'A JSON object is required.');
+ if (Object.keys(data).some(k => !['original','compressed','expected'].includes(k))) throw new RequestError(400,'Unexpected request field.');
  for (const key of ['original','compressed']) if (typeof data[key] !== 'string' || !data[key].trim() || data[key].length > MAX_TEXT) throw new RequestError(400, `Each prompt must contain 1–${MAX_TEXT} code units.`);
  if (data.expected !== undefined && (typeof data.expected !== 'string' || data.expected.length > 4000)) throw new RequestError(400,'Expected answer must be text of at most 4000 code units.');
  return { original: data.original, compressed: data.compressed, expected: data.expected ?? '' };
@@ -46,11 +47,16 @@ export function createGateway({ key = process.env.GEMINI_API_KEY ?? '', model = 
   if (!response.ok) throw new RequestError(502,`Gemini returned HTTP ${response.status}. Check your model access, auth key, quota and billing. No provider error body is exposed.`);
   let data;
   try { data = await response.json(); } catch { throw new RequestError(502,'Gemini returned an unreadable response.'); }
+  if (!data || typeof data !== 'object' || Array.isArray(data) ||
+      (data.candidates !== undefined && !Array.isArray(data.candidates))) throw new RequestError(502,'Gemini returned a malformed response.');
   const candidate = data.candidates?.[0];
+  const parts = candidate?.content?.parts;
+  if ((parts !== undefined && (!Array.isArray(parts) || parts.some(p => !p || typeof p !== 'object' || (p.text !== undefined && typeof p.text !== 'string')))) ||
+      (!candidate && !data.promptFeedback?.blockReason)) throw new RequestError(502,'Gemini returned a malformed response.');
   const text = (candidate?.content?.parts ?? []).filter(p => typeof p.text === 'string' && !p.thought).map(p => p.text).join('');
   const usage = {};
   for (const field of ['promptTokenCount','candidatesTokenCount','totalTokenCount','thoughtsTokenCount']) {
-   const value = data.usageMetadata?.[field]; if (typeof value === 'number' && Number.isFinite(value)) usage[field] = value;
+   const value = data.usageMetadata?.[field]; if (Number.isSafeInteger(value) && value >= 0) usage[field] = value;
   }
   return { text, elapsedMs: performance.now()-start, usage, finishReason: candidate?.finishReason ?? data.promptFeedback?.blockReason ?? 'UNKNOWN', exactMatch: expected.trim() ? answersMatch(text, expected) : null, modelVersion: typeof data.modelVersion === 'string' ? data.modelVersion : null };
  }

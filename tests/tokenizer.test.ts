@@ -5,6 +5,17 @@ import { getStrategy } from '../src/engine/strategies.js';
 import { DEFAULTS } from '../src/engine/types.js';
 import type { Encoding } from '../src/engine/types.js';
 import fixture from './fixtures/tiktoken.json';
+import hardeningFixture from './fixtures/tiktoken-hardening.json';
+
+describe('independent hardening Unicode/control fixtures', () => {
+    for (const [i, sample] of hardeningFixture.cases.entries()) it(`targeted fixture ${i}`, async () => {
+        const t = await getTokenizer(sample.encoding as Encoding);
+        expect(t.encode(sample.text)).toEqual(sample.ids);
+        // Lone UTF-16 surrogates become replacement characters under UTF-8 encoding.
+        expect(t.decode(t.encode(sample.text))).toBe(sample.decoded);
+        expect(inspectTokens(sample.text, t).total).toBe(sample.ids.length);
+    });
+});
 
 describe(`independent Python tiktoken ${fixture.version} token IDs`, () => {
     for (const [i, sample] of fixture.cases.entries()) {

@@ -16,7 +16,9 @@ export function softSignals(text: string): Pick<Weights, 'instruction' | 'entity
 }
 export function weightedScore(features: Weights, weights: Weights): Pick<ScoreBreakdown, 'contributions' | 'positiveWeightSum' | 'rawScore'> {
     if (!Object.values(weights).every(w => Number.isFinite(w) && w >= 0)) throw new Error('Importance weights must be finite and nonnegative.');
+    if (!Object.values(features).every(f => Number.isFinite(f) && f >= 0 && f <= 1)) throw new Error('Features must be finite values in [0, 1].');
     const positiveWeightSum = weights.relevance + weights.information + weights.instruction + weights.entity + weights.structure;
+    if (!Number.isFinite(positiveWeightSum)) throw new Error('Weight sum exceeds the finite numerical range.');
     const term = (key: keyof Weights) => positiveWeightSum ? features[key] * weights[key] / positiveWeightSum : 0;
     const contributions: Weights = { relevance: term('relevance'), information: term('information'), instruction: term('instruction'),
         entity: term('entity'), structure: term('structure'), redundancy: -weights.redundancy * features.redundancy };
@@ -40,7 +42,8 @@ export async function scoreChunks(original: string, chunks: Chunk[], context: Co
             context.progress?.(`Scoring chunk ${chunk.index + 1} of ${chunks.length} locally…`);
             relevance = clamp(vectorMetrics((await context.embed!(chunk.text)).vector, taskVector).cosine);
         }
-        const features: Weights = { relevance, information, ...softSignals(chunk.text), redundancy };
+        // Analytical bounds are [0,1]; floating-point cosine/surprisal can overshoot by an ulp.
+        const features: Weights = { relevance: clamp(relevance), information: clamp(information), ...softSignals(chunk.text), redundancy };
         const breakdown: ScoreBreakdown = { features, weights: { ...weights }, ...weightedScore(features, weights),
             relevanceMetric: !task.trim() || !chunk.text.trim() ? 'missing-empty-text' : useSemantic ? 'embedding-cosine' : 'lexical-cosine', focusId: focus.chunkId,
             ...(useSemantic && context.embeddingModel ? { embeddingModel: { ...context.embeddingModel } } : {}) };

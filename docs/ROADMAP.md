@@ -1,8 +1,8 @@
 # Roadmap: earn the claim before making it
 
-## Gate 0: verify this source
+## Gate 0: local verification and post Phase 2 hardening
 
-Install and lock dependencies; fix real type/runtime mismatches; execute integration tests and browser flows; compare selected BPE outputs against independent tiktoken fixtures; inspect long-input embedding behavior and network privacy. Capture actual screenshots. Until then, call this a development build.
+Local integration and Phase 2 have executed verification. The post Phase 2 [hardening report](HARDENING-REPORT.md) records adversarial regressions, repairs and remaining limits. This remains an experimental development build. The hardening corpus is implementation testing, not the proposed benchmark corpus below. Phase 3 work requires a separate task.
 
 ## Gate 1: make the evidence stronger
 

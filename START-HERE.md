@@ -2,7 +2,7 @@
 
 This is the actual project source, not a prompt to generate a project. Open the folder containing `package.json` in VS Code. You do not need AWS, Docker, Python, a database or a Gemini key for the core lab.
 
-**Build status:** Local Windows/Chromium verification passed: dependency installation, strict TypeScript, 140 unit tests, 71 pure-engine checks, 14 mocked gateway tests, production build, six desktop/mobile browser tests, independent tiktoken fixtures, and real browser embeddings. The real lockfile and inspected screenshots are included. Live Gemini and deployment remain unverified. See `docs/BUILD-STATUS.md` for evidence and limits.
+**Build status:** The post Phase 2 hardening gate is documented in [HARDENING-REPORT](docs/HARDENING-REPORT.md). Current commands, counts and verification limits are in [BUILD-STATUS](docs/BUILD-STATUS.md). Core algorithms and browser embeddings work locally; live Gemini and deployment remain unverified.
 
 ## 1. Open the project
 
@@ -58,7 +58,7 @@ In **Source Control** (`Ctrl+Shift+G`), initialize the repository if required. S
 
 Check the staged changes: `.env.local`, credentials, `node_modules`, `dist`, and browser caches must NOT be included. The `.gitignore` already excludes them. If Git asks for an author, set your preferred name and GitHub email for this repository, not a different company's identity.
 
-This downloaded project has **not** already been published or pushed to your account.
+Publishing instructions describe a human-operated workflow; this guide does not establish the current remote repository or deployment state.
 
 ## 5. Put the keyless application on GitHub Pages
 

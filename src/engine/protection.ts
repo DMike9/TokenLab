@@ -24,25 +24,26 @@ export function protectedSpans(text: string, custom: string[] = []): Span[] {
     match(/"(?:\\.|[^"\\])*"|“[^”]*”|'[^'\n]{2,}'/g, 'Quoted string');
     match(/https?:\/\/[^\s<>]+|\b[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}\b/g, 'URL or email');
     match(/\b(?:not|never|no|cannot|without|unless|except|don['’]t|can['’]t|mustn['’]t|shouldn['’]t|won['’]t|isn['’]t|doesn['’]t)\b/gi, 'Negation or logical qualifier');
-    match(/\b\d+(?:[.,:/-]\d+)*(?:%|[A-Za-z]+)?\b/g, 'Number or date');
+    match(/(?<![\w])(?:[$€£¥][+-]?|[+-][$€£¥]?)?\d+(?:[.,:/-]\d+)*(?:%|[A-Za-z]+\b)?/g, 'Number or date');
     match(/<\/?[A-Za-z][^>]*>/g, 'XML / HTML tag');
     match(/\b[a-zA-Z]+(?:_[a-zA-Z0-9]+)+\b|\$\{[^}]+\}|\{\{[^}]+\}\}|\b[A-Z]{2,}[A-Z0-9_]*\b/g, 'Identifier or acronym');
+    match(/\b[a-zA-Z][\w]*(?:[-.][\w]+)+\b|\b[a-z]+(?:[A-Z][a-z0-9]*)+\b/g, 'Identifier or filename (heuristic)');
     match(/\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)+\b/g, 'Possible multiword proper noun (heuristic)');
     match(/^(?:[ \t]*#{1,6}\s+.*|[ \t]*[-*+]\s+.*|[ \t]*\d+[.)]\s+.*|[ \t]*>.*|[ \t]*\|.*|[ \t]{4,}.*)$/gm, 'Meaningful Markdown / indentation');
     // Protect instruction clauses, not only the words "must" or "never".
-    const instruction = /(?:^|[.!?\n]\s*)(?:(?:please|you\s+(?:must|should|will|need\s+to))\s+)?(?:do\s+not|never|must|return|respond|output|write|summarize|calculate|extract|classify|compare|explain|list|use|keep|preserve|avoid|include|exclude|ensure|answer|format|delete|generate|translate)\b[^\n.!?]*(?:[.!?]|$)/gi;
+    const instruction = /(?:^|(?<=[.!?\n]))\s*(?:(?:please|you\s+(?:must|should|will|need\s+to))\s+)?(?:do\s+not|never|must|return|respond|output|write|summarize|calculate|extract|classify|compare|explain|list|use|keep|preserve|avoid|include|exclude|ensure|answer|format|delete|generate|translate)\b[^\n.!?]*(?:[.!?]|$)/gi;
     for (const m of text.matchAll(instruction)) {
-        const leading = m[0].match(/^[.!?\n]\s*/)?.[0].length ?? 0;
+        const leading = m[0].match(/^\s*/)?.[0].length ?? 0;
         add(m.index! + leading, m.index! + m[0].length, 'Explicit instruction (heuristic)');
     }
-    for (const term of custom.filter(t => t.trim())) {
+    for (const term of new Set(custom.filter(t => t.trim()))) {
         let from = 0;
         while (from < text.length) {
             const at = text.indexOf(term, from);
             if (at < 0)
                 break;
             add(at, at + term.length, 'User-protected exact text');
-            from = at + term.length;
+            from = at + 1; // Overlapping exact occurrences are independently protected.
         }
     }
     return spans.sort((a, b) => a.start - b.start || b.end - a.end);
@@ -88,7 +89,7 @@ export function protectionRetention(original: string, compressed: string, custom
                 if (at < 0)
                     break;
                 count++;
-                from = at + s.text.length;
+                from = at + 1;
             }
             available.set(key, count);
         }

@@ -5,6 +5,8 @@ import { originalChunks } from '../src/engine/taskFocus.js';
 
 test('real public model downloads and browser-worker inference', async ({ page }, info) => {
     const errors: string[] = [], network: string[] = [];
+    const externalBodies: string[] = [];
+    page.on('request', r => { if (!r.url().startsWith('http://127.0.0.1:') && (r.method() !== 'GET' || r.postData())) externalBodies.push(r.url()); });
     page.on('pageerror', e => errors.push(e.message));
     page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
     page.on('requestfailed', r => network.push(`${r.url().split('?')[0]}: ${r.failure()?.errorText}`));
@@ -32,6 +34,8 @@ test('real public model downloads and browser-worker inference', async ({ page }
     expect(exported.experiments[0].similarity.originalChunks).toBeGreaterThan(1);
     expect(exported.experiments[1].similarity.cosine).toBeGreaterThanOrEqual(.95 - 1e-10);
     await expect(page.getByLabel('Recorded result settings')).toContainText(exported.experiments.at(-1).similarity.revision);
+    const point = page.locator('.pareto [role="button"]').first();
+    await point.focus(); await page.keyboard.press('Space'); await expect(point).toBeFocused();
     const measured = await page.locator('.result-metrics').innerText();
     await page.getByRole('button', { name: /Enabled · disable for new runs/ }).click();
     await expect(page.locator('.settings-changed')).toBeVisible();
@@ -40,6 +44,7 @@ test('real public model downloads and browser-worker inference', async ({ page }
     await page.locator('.results').screenshot({ path: info.outputPath('embedding-results.png') });
     expect(errors).toEqual([]);
     expect(network).toEqual([]);
+    expect(externalBodies).toEqual([]);
     await writeFile(info.outputPath('embedding-evidence.json'), JSON.stringify({ exported, errors, network }, null, 2));
 });
 
@@ -56,13 +61,14 @@ test('long Unicode tails affect real worker embeddings beyond the first window',
                 const prefix = 'Routine planning and team coordination. '.repeat(100);
                 const a = await embedText(prefix + 'Flowers bloom in the garden. café 🌱 中文 👩🏽‍💻 '.repeat(100));
                 const b = await embedText(prefix + 'Database replication and network security. '.repeat(100));
-                self.postMessage({ revision: modelRevision(), a, b });
+                const identical = await embedText(prefix + 'Database replication and network security. '.repeat(100));
+                self.postMessage({ revision: modelRevision(), a, b, identical });
             } catch (e) { self.postMessage({ error: String(e) }); }
         `;
         const url = URL.createObjectURL(new Blob([source], { type: 'text/javascript' }));
         const worker = new Worker(url, { type: 'module' });
         try {
-            return await new Promise<{ error?: string; revision: string; a: { vector: number[]; chunks: number }; b: { vector: number[]; chunks: number } }>((resolve, reject) => {
+            return await new Promise<{ error?: string; revision: string; a: { vector: number[]; chunks: number }; b: { vector: number[]; chunks: number }; identical: { vector: number[]; chunks: number } }>((resolve, reject) => {
                 worker.onmessage = event => resolve(event.data);
                 worker.onerror = event => reject(new Error(event.message));
             });
@@ -72,6 +78,11 @@ test('long Unicode tails affect real worker embeddings beyond the first window',
     expect(tails.a.chunks).toBeGreaterThan(1);
     expect(tails.b.chunks).toBeGreaterThan(1);
     expect(tails.a.vector).toHaveLength(384);
+    expect(tails.a.vector.every(Number.isFinite)).toBe(true);
+    expect(tails.b.vector).toHaveLength(384);
+    expect(Math.hypot(...tails.a.vector)).toBeCloseTo(1, 10);
+    expect(Math.hypot(...tails.b.vector)).toBeCloseTo(1, 10);
+    expect(tails.identical.vector).toEqual(tails.b.vector);
     const cosine = tails.a.vector.reduce((sum, v, i) => sum + v * tails.b.vector[i], 0);
     expect(cosine).toBeLessThan(.99);
     await writeFile(info.outputPath('tail-evidence.json'), JSON.stringify({ revision: tails.revision, aChunks: tails.a.chunks, bChunks: tails.b.chunks, cosine }, null, 2));
@@ -79,6 +90,8 @@ test('long Unicode tails affect real worker embeddings beyond the first window',
 
 test('task focus controls real embedding relevance without changing the prompt', async ({ page }, info) => {
     const errors: string[] = [], network: string[] = [];
+    const externalBodies: string[] = [];
+    page.on('request', r => { if (!r.url().startsWith('http://127.0.0.1:') && (r.method() !== 'GET' || r.postData())) externalBodies.push(r.url()); });
     page.on('pageerror', e => errors.push(e.message));
     page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
     page.on('requestfailed', r => network.push(`${r.url().split('?')[0]}: ${r.failure()?.errorText}`));
@@ -123,5 +136,6 @@ test('task focus controls real embedding relevance without changing the prompt',
     await page.locator('.results').screenshot({ path: info.outputPath('focus-embedding.png') });
     expect(errors).toEqual([]);
     expect(network).toEqual([]);
+    expect(externalBodies).toEqual([]);
     await writeFile(info.outputPath('focus-embedding-evidence.json'), JSON.stringify({ exported, errors, network }, null, 2));
 });
