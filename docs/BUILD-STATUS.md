@@ -1,5 +1,38 @@
 # Build status: locally verified development build
 
+## Phase 3 — Signature mathematical research experience — 2026-09-09
+
+**COMPLETE; locally verified and commit-ready for the experimental application.** Compare math, Sigmoid vs Softmax decisions and independent budget ladders use the existing weighted importance engine. No unresolved Critical/High issue remained in the preceding hardening report. No scoring formula was tuned for the new teaching example. Scientific design and actual calculations: [MATH-EXPERIMENTS](MATH-EXPERIMENTS.md).
+
+| Command actually executed | Result |
+| --- | --- |
+| `node --version`, `npm --version` | Node **24.15.0**, npm **11.12.1**, within the supported Node 22.12+ range. |
+| `npm ci` | Clean installation passed: **109 packages added, 110 audited**, 28 s. Existing verified lockfile unchanged. Transitive `boolean` deprecation notice remains; no audit vulnerability. |
+| `npm test -- tests/studies.test.ts` | **16/16 passed**: actual BPE controlled studies, fixed focus/weights/protection, only-variable changes, independent ladders, numeric behavior, all decision labels, truthful observations and redaction. |
+| `npm run verify`, final | Strict TypeScript, **218/218 Vitest**, **20/20 mocked gateway tests**, production build **52 modules**, 5.83 s. All earlier tests retained. The existing **48 independently generated tiktoken fixtures** still match the actual installed BPE library's IDs/decodes. |
+| `npm run check:core` | **71/71** passed. Character/vector seams remain isolated pure-engine checks, not BPE or model claims. |
+| `npx playwright install chromium` | Successful; installed Chromium available. |
+| `npm run test:e2e`, final | **31/31 passed**, 56.8 s, including all ten examples/70 non-model strategy runs and five new Phase 3 tests. Covers all three viewports, exports, recorded controls, paired values, keyboard inspection, ladder results, cancellation and history. |
+| `npm run test:model` | **4/4 passed**, 40.0 s. Actual public model downloads and browser worker inference, full long Unicode tails, task focus and eleven model-enabled study/ladder runs. |
+| `npm run preview` | Served final production bundle at `http://127.0.0.1:4173/`. |
+| `npx playwright test --config .cache/phase3-preview.config.ts phase3.spec.ts lab.spec.ts` | **8/8 passed**, 49.4 s against production. Temporary config selects the production URL; includes the five Phase 3 and three original lab browser tests. |
+| `$env:TOKENLAB_TEST_URL='http://127.0.0.1:4173'; npm run test:model -- --grep 'real public\|real embeddings measure' --output .cache/phase3-preview-model` | **2/2 passed**, 17.4 s against production: original model smoke plus controlled transform study and budget ladder. The pipe is regex alternation inside the quoted argument. |
+| `npm audit --json`, `npm audit` | **0 vulnerabilities** (Critical/High/Moderate/Low all zero). No dependency upgrades or lockfile changes needed. |
+| `python .cache/curate-phase3.py` | Retained three distinct production screenshots and compact synthetic evidence. One original and one raw-feature record per study; no repeated stage dumps. |
+| `python .cache/audit-phase3.py`, `git diff --check` | Passed: 25 intended files, relative Markdown links, public-path/credential-pattern scan and curated measurement invariants. Environment/ignored files excluded. No diff whitespace errors after removing one trailing space. |
+| `npm run build`, `node .cache/check-phase3-copy.mjs` | After final copy-indicator reset and chart-caption wording, strict TypeScript/production build passed (52 modules, 8.01 s). Actual production clipboard changed with the selected result; selecting a study/member reset the copied indicator. |
+| `node .cache/inspect-phase3-depth.mjs` | Inspected calculated curve overlay/Softmax distribution and mobile ladder from production; these additional captures remain ignored, keeping only the three distinct public screenshots. |
+
+Inspected actual **1440×1000**, **1024×768** and **390×844** rendering. [Main research](verification/phase3/research-1440.png), [Sigmoid vs Softmax](verification/phase3/sigmoid-softmax-1024.png), [mobile result](verification/phase3/result-390.png). All new viewport tests recorded no page/console errors, no remote keyless-study requests and no page-wide overflow. Paired text was enlarged after visual inspection. The in-app browser bootstrap failed with `missing field sandboxPolicy`; installed Playwright Chromium supplied the evidence. Native browser chrome zoom, manual screen readers, physical devices and other browsers remain unverified.
+
+Real model: **Xenova/all-MiniLM-L6-v2**, revision **751bff37182d3f1213fa05d7196b954e230abad9**, q8/WASM, Transformers.js **3.8.1**. No failed model/runtime requests or external request bodies were observed in the real-model tests. Long-tail checks still used **7/5 windows**, with cosine **0.5246208440170577**. [Curated measurements and decisions](verification/phase3/evidence.json) retain the actual transform and ladder results. They are diagnostic examples, not task-accuracy evidence or a benchmark dataset.
+
+Observed lexical teaching behavior: **138 original tokens; 89-token fixed target**. Sigmoid retained **51 tokens / 5 chunks**; Softmax **88 tokens / 19 chunks**. Of fourteen differing decisions, **eleven are whitespace-only and three contain text**. Square/Exponential and Square-root/Log pairs produced identical outputs. Linear ladder targets 90/70/50/30% achieved **86/86/62/40 tokens**; the first two tied because the cutoff still applied. Separate protected-only ladder tests retained 100% and reported all targets unmet. None of these observations declares a winner.
+
+Failure history: the first full type check found a missing explicit protection-array argument in a new test helper, which was corrected. One initial desktop browser attempt lost its session when the teaching-example source edit triggered Vite reload; it timed out waiting for an export that was correctly disabled after reset. Stable-server full and production suites subsequently passed. An immediately displayed stale-settings notice for selected ladder budgets was corrected to ignore the swept variable while still detecting fixed-control edits, and the final production/browser tests cover it. No assertion was removed or weakened to make a failure green.
+
+No live Gemini calls, secret inspection, commit, push, deployment or Phase 4 work. Heuristic English focus/protection, greedy admission, embedding pooling/proxy limits and absent task evaluation remain explicit. The package is still 0.1.0; run evidence is **tokenlab-0.3.0**. The following sections are historical checks and counts.
+
 ## Hardening Gate ? Post Phase 2 ? 2026-09-09
 
 **PASS for the experimental local application; commit-ready.** Twelve findings repaired (0 Critical, 2 High, 5 Medium, 5 Low); no unresolved Critical/High defect found in reviewed paths. Full findings, reproductions, residual limits and mutation evidence: [HARDENING-REPORT](HARDENING-REPORT.md). This is not Phase 3 or downstream research validation.

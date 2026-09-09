@@ -28,5 +28,7 @@ export function exportCsv(runs: Run[]): string {
         r.metrics.originalTokens, r.metrics.compressedTokens, r.metrics.savedTokens, r.metrics.savingsPercent, r.metrics.factor, r.similarity?.cosine, r.metrics.protectionRate, r.compressionMs, r.totalMs,
         r.taskFocus.policy, r.taskFocus.chunkId, r.taskFocus.textHash, r.taskFocus.reason, r.taskFocus.fallback, r.taskFocus.algorithm,
         JSON.stringify(r.settings.weights), JSON.stringify(r.stages.map(s => ({ method: s.method, decisions: s.decisions.map(redactDecision) })))]);
+    fields.push('study_id', 'study_kind', 'study_variable', 'study_index', 'study_total');
+    rows.forEach((row, i) => row.push(runs[i].study?.id, runs[i].study?.kind, runs[i].study?.variable, runs[i].study?.index, runs[i].study?.total));
     return [fields, ...rows].map(row => row.map(csvCell).join(',')).join('\r\n');
 }

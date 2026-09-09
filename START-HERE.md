@@ -42,7 +42,7 @@ When Vite displays its local address, open it in your browser. The default is `h
 
 ## 3. Try the first demonstration
 
-Load **Redundancy stress test**, click **Analyze prompt**, then **Redundancy**. Compare the original and compressed text. Next try **Importance + math** and the seven transformation buttons. Inspect **Why it survived** rather than just the percentage saved.
+Load **Same scores, different math**, click **Analyze prompt**, then **Compare math**. Inspect the actual counts and expand **Sigmoid vs Softmax** for chunk decisions. **More research experiments** offers the focused pair and an independent budget ladder. Open **Research** to adjust task focus, weights, cutoff and optional local embeddings. See [the math experiment note](docs/MATH-EXPERIMENTS.md) for formulas and measured examples.
 
 Load **The negation trap**. Confirm that `NOT`, the prohibition, and the required output survive. Set an aggressive target and observe an honest **budget unmet** result when protection makes the target infeasible.
 

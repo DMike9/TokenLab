@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
-import type { Method, Run, Settings, Transform, Weights } from './engine/types.js';
+import type { Method, Run, Settings, StudyKind, Transform, Weights } from './engine/types.js';
 import { DEFAULTS, MAX_CHARACTERS } from './engine/types.js';
 import { STRATEGIES, getStrategy } from './engine/strategies.js';
 import { TRANSFORMS } from './engine/transforms.js';
@@ -16,6 +16,8 @@ import { ResultContext, settingsChanged } from './components/ResultContext.js';
 import { ResultTabs } from './components/ResultTabs.js';
 import { TaskFocusControls, focusLabel } from './components/TaskFocusControls.js';
 import { ScoreDetails } from './components/ScoreDetails.js';
+import { StudyResults } from './components/StudyResults.js';
+import { STUDY_TITLES } from './engine/studies.js';
 const number = (v: number | null | undefined, digits = 0) => v == null ? '—' : v.toLocaleString(undefined, { maximumFractionDigits: digits });
 const percent = (v: number | null | undefined) => v == null ? '—' : `${(v * 100).toFixed(1)}%`;
 function protectedText(text: string, terms: string[]) {
@@ -68,9 +70,15 @@ export default function App() {
     const activeAnalysis = analysis?.input === input && analysis.encoding === settings.encoding && JSON.stringify(analysis.protectedTerms) === JSON.stringify(protectedTerms) ? analysis : null;
     const matchingRuns = runs.filter(r => r.original === input && r.settings.encoding === settings.encoding);
     const selected = runs.find(r => r.id === selectedId && r.original === input) ?? matchingRuns.at(-1);
+    const studyRuns = selected?.study ? runs.filter(r => r.study?.id === selected.study!.id) : [];
+    const studyChanged = !!selected?.study && settingsChanged(selected, {
+        ...settings, protectedTerms,
+        // The swept variable has multiple recorded values, so compare only the fixed controls.
+        ...(selected.study.variable === 'transform' ? { transform: selected.settings.transform } : { budget: selected.settings.budget }),
+    }, ['hybrid']);
     const resultAnalysis = selected && analysis?.input === selected.original && analysis.encoding === selected.settings.encoding ? analysis : null;
     const exportRuns = exportScope === 'current' ? matchingRuns : runs;
-    const changed = !!selected && settingsChanged(selected, { ...settings, protectedTerms }, chainMode ? chain : [method]);
+    const changed = selected?.study ? studyChanged : !!selected && settingsChanged(selected, { ...settings, protectedTerms }, chainMode ? chain : [method]);
     const chartRuns = matchingRuns.filter(r => !selected?.similarity || !r.similarity || (r.similarity.model === selected.similarity.model && r.similarity.revision === selected.similarity.revision && r.similarity.dtype === selected.similarity.dtype));
     const diff = useMemo(() => selected ? diffText(selected.original, selected.compressed) : null, [selected]);
     const example = EXAMPLES.find(e => e.id === exampleId);
@@ -140,10 +148,11 @@ export default function App() {
             finish(id);
         }
     };
-    const sweep = async () => {
+    const sweep = async (kind: StudyKind = 'transforms') => {
         const id = begin(); if (id === null) return;
         setChainMode(false);
-        setMethod('importance');
+        setCopied(false);
+        setMethod('hybrid');
         setBusy(true);
         setError('');
         setStatus('');
@@ -154,17 +163,19 @@ export default function App() {
                 if (!current(id)) return;
                 setAnalysis(result);
             }
-            const completed: Run[] = [];
-            for (const transform of TRANSFORMS) {
-                const r = await lab.run(input, ['importance'], { ...snapshot, transform: transform.id });
+            const completed = await lab.study(input, kind, snapshot);
+            if (!current(id)) return;
+            // Publish the whole verified group atomically; cancellation never leaves a partial study.
+            setRuns(old => [...old, ...completed].slice(-100));
+            setSelectedId(completed.at(-1)!.id);
+            setTab('diff');
+            if (kind !== 'ladder') update('transform', completed.at(-1)!.settings.transform);
+            setStatus(kind === 'transforms' ? 'Completed 7 transforms against the same original prompt and settings.' : `${STUDY_TITLES[kind]} complete. ${completed.length} independent runs recorded.`);
+            requestAnimationFrame(() => {
                 if (!current(id)) return;
-                completed.push(r);
-                setRuns(old => [...old, r].slice(-100));
-                setSelectedId(r.id);
-            }
-            setTab('scores');
-            update('transform', TRANSFORMS.at(-1)!.id);
-            setStatus(`Completed ${completed.length} transforms against the same original prompt and settings.`);
+                const heading = document.getElementById('study-heading');
+                heading?.focus({ preventScroll: true }); heading?.scrollIntoView({ block: 'start' });
+            });
         }
         catch (e) {
             if (!current(id)) return;
@@ -250,13 +261,15 @@ export default function App() {
  {analysis && !activeAnalysis && <p className="analysis-stale fineprint" role="status">Analysis out of date — analyze or run again to update counts and protected spans.</p>}
  <p className="fineprint">Exact raw-text counts for the selected BPE encoding. Not a full chat-request bill, not a Gemini token count. {example && <span>{example.lesson}</span>}</p>
  </section>
+ <section className="panel study-launch" aria-label="Mathematical experiments"><div className="study-launch-main"><div><span className="eyebrow">ONE PROMPT / SEVEN WAYS TO SHAPE IMPORTANCE</span><h2>Same scores. Different math.</h2><p>Compare what survives at the same token budget. Only the transform changes.</p></div><button className="primary" disabled={busy || !input.trim()} onClick={() => void sweep()}>Compare math ↗</button></div><details className="study-presets"><summary>More research experiments</summary><p className="fineprint">These use your current prompt and controls with the existing weighted importance engine. Every run starts from the original. Adjust weights, task focus, budget and optional embeddings in Research.</p><div className="guided-grid"><button disabled={busy || !input.trim()} onClick={() => void sweep()}><strong>Why math matters</strong><span>Seven transforms. Can monotonic shaping change which chunks fit?</span></button><button disabled={busy || !input.trim()} onClick={() => void sweep('sigmoid-softmax')}><strong>Sigmoid vs Softmax</strong><span>Independent shaping or relative shares? Inspect the same chunks under both.</span></button><button disabled={busy || !input.trim()} onClick={() => void sweep('ladder')}><strong>Compression vs preservation</strong><span>90%, 70%, 50%, 30% targets. See actual retention and inspect each result.</span></button></div></details></section>
+ {studyRuns.length > 0 && <StudyResults runs={studyRuns} selected={selected?.id} changed={studyChanged} onSelect={id => { setSelectedId(id); setCopied(false); setTab('diff'); }}/>}
  <div className={`lab-layout ${mode === 'explore' ? 'explore-layout' : ''}`}><aside className="control-column" hidden={mode !== 'research'}><section className="panel controls"><div className="section-heading"><div><span className="eyebrow">02 / THE INSTRUMENT</span><h2>Compression lab</h2></div><span className="badge">{chainMode ? 'CHAIN' : 'INDEPENDENT'}</span></div>
  <TaskFocusControls text={input} settings={{ ...settings, protectedTerms }} busy={busy} onChange={value => update('taskFocus', value)}/><p className="fineprint">Every independent run starts from the original prompt, not the last result.</p><div className="method-grid">{STRATEGIES.map(s => <button key={s.id} className={`method-card ${method === s.id ? 'active' : ''}`} disabled={busy || (s.id === 'similarity' && !settings.useEmbeddings)} onClick={() => { setChainMode(false); void run(s.id, {}, [s.id]); }}><span>{s.name}<b>↗</b></span><small>{s.description}</small>{s.warning && <em>DESTRUCTIVE EXPERIMENT</em>}</button>)}</div>
  {!settings.useEmbeddings && <p className="fineprint">Similarity guard is unavailable until you enable the local embedding model below.</p>}
  <div className="control-section"><span className="eyebrow">TOKEN BUDGET</span><Slider disabled={busy} label="Target retained" value={settings.budget} min={.1} max={1} step={.05} format={percent} onChange={v => update('budget', v)}/><p className="fineprint">Applies to importance, hybrid and similarity guard. Protected chunks may make a target infeasible.</p></div>
  <div className="control-section"><span className="eyebrow">MATHEMATICAL SHAPING</span><div className="transform-buttons">{TRANSFORMS.map(t => <button key={t.id} disabled={busy} title={t.explanation} aria-pressed={settings.transform === t.id} className={settings.transform === t.id ? 'active' : ''} onClick={() => applyTransform(t.id)}>{t.label}</button>)}</div>
  <TransformChart settings={settings}/><Slider disabled={busy} label="Shaped-score cutoff" value={settings.cutoff} onChange={v => update('cutoff', v)}/>{settings.transform === 'softmax' && <Slider disabled={busy} label="Temperature" min={.05} max={2} step={.05} value={settings.temperature} onChange={v => update('temperature', v)}/>}{settings.transform === 'sigmoid' && <><Slider disabled={busy} label="Sigmoid steepness k" min={1} max={20} step={1} value={settings.steepness} onChange={v => update('steepness', v)} format={number}/><Slider disabled={busy} label="Sigmoid center t" value={settings.center} onChange={v => update('center', v)}/></>}
- <button className="wide" disabled={busy || !input.trim()} onClick={sweep}>Run all 7 transforms against this prompt</button></div>
+ <button className="wide" disabled={busy || !input.trim()} onClick={() => void sweep()}>Run all 7 transforms against this prompt</button></div>
  <details className="control-section"><summary>Redundancy parameters</summary><Slider disabled={busy} label="Sentence overlap threshold" min={.5} max={1} value={settings.redundancyThreshold} onChange={v => update('redundancyThreshold', v)}/><Slider disabled={busy} label="N-gram size" min={1} max={5} step={1} value={settings.ngramSize} onChange={v => update('ngramSize', v)} format={number}/><Slider disabled={busy} label="Minimum occurrences" min={2} max={5} step={1} value={settings.minimumRepetitions} onChange={v => update('minimumRepetitions', v)} format={number}/><p className="fineprint">Threshold 1 uses exact case-sensitive trimmed chunk text. Lower values use word n-gram Jaccard, not embedding similarity.</p></details>
  <details className="control-section"><summary>Experimental weighted objective</summary><p className="fineprint">Weighted positive features divided by their weight sum, minus redundancy weight × redundancy; clipped to [0,1]. Experimental heuristic — not a learned importance probability. These sliders apply to Weighted hybrid; Importance + math and Similarity guard use fixed default weights. Instruction-like questions, possible named items and labels can signal eligible content, but hard protection always wins. Increasing a positive weight also rescales the other positive contributions.</p>{(Object.keys(settings.weights) as (keyof Weights)[]).map(key => <Slider disabled={busy} key={key} label={key === 'relevance' ? `Relevance (${settings.useEmbeddings ? 'embedding' : 'lexical'})` : key} value={settings.weights[key]} onChange={value => update('weights', { ...settings.weights, [key]: value })}/>)}<p className="fineprint">Relevance uses the selected original task focus. Inspect the recorded focus and contributions for each run; hard protection is independent of these weights.</p><button disabled={busy} onClick={() => { setChainMode(false); void run('hybrid', {}, ['hybrid']); }}>Run weighted hybrid</button></details>
  <details className="control-section"><summary>Chain operations</summary><p className="fineprint">Each budget percentage applies to that stage’s input. Repeated budget stages can compound reductions; final metrics compare with the original.</p><label className="check"><input type="checkbox" checked={chainMode} disabled={busy} onChange={e => setChainMode(e.target.checked)}/> Use ordered pipeline on Run experiment</label><div className="chain-editor">{chain.map((m, i) => <div className="row" key={i}><span className="step-num">{i + 1}</span><select aria-label={`Pipeline stage ${i + 1}`} value={m} disabled={busy} onChange={e => setChain(old => old.map((x, j) => i === j ? e.target.value as Method : x))}>{STRATEGIES.filter(s => s.id !== 'baseline').map(s => <option key={s.id} value={s.id} disabled={s.id === 'similarity' && !settings.useEmbeddings}>{s.name}</option>)}</select><button className="small" aria-label={`Remove stage ${i + 1}`} disabled={busy || chain.length === 1} onClick={() => setChain(old => old.filter((_, j) => j !== i))}>×</button></div>)}</div><button disabled={busy || chain.length >= 8} onClick={() => setChain(old => [...old, 'importance'])}>+ Stage</button></details>

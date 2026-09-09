@@ -2,7 +2,7 @@
 
 ## Gate 0: local verification and post Phase 2 hardening
 
-Local integration and Phase 2 have executed verification. The post Phase 2 [hardening report](HARDENING-REPORT.md) records adversarial regressions, repairs and remaining limits. This remains an experimental development build. The hardening corpus is implementation testing, not the proposed benchmark corpus below. Phase 3 work requires a separate task.
+Local integration and Phase 2 have executed verification. The post Phase 2 [hardening report](HARDENING-REPORT.md) records adversarial regressions, repairs and remaining limits. This remains an experimental development build. The hardening corpus is implementation testing, not the proposed benchmark corpus below. Phase 3 now adds controlled mathematical studies, paired Sigmoid/Softmax decisions and independent budget ladders; see [MATH-EXPERIMENTS](MATH-EXPERIMENTS.md). These make the heuristics inspectable and do not supply downstream validation. The dataset and evaluation gates below remain future work.
 
 ## Gate 1: make the evidence stronger
 

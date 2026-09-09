@@ -1,13 +1,15 @@
-import type { Method, Settings } from '../engine/types.js';
+import type { Method, Settings, StudyKind } from '../engine/types.js';
 import { MAX_CHARACTERS } from '../engine/types.js';
 import { inspectTokens, getTokenizer } from '../tokenizer/index.js';
 import { protectedSpans } from '../engine/protection.js';
 import { calculateMetrics } from '../engine/metrics.js';
 import { runExperiment } from '../engine/runner.js';
+import { runStudy } from '../engine/studies.js';
 import { initializeEmbeddings, clearEmbeddingTextCache } from '../similarity/embedding.js';
 interface Request {
     id: number;
-    action: 'analyze' | 'run' | 'embeddings' | 'clear';
+    action: 'analyze' | 'run' | 'study' | 'embeddings' | 'clear';
+    studyKind?: StudyKind;
     text?: string;
     methods?: Method[];
     settings: Settings;
@@ -35,6 +37,8 @@ self.onmessage = (event: MessageEvent<Request>) => {
                 const tokenizer = await getTokenizer(settings.encoding);
                 result = { input: text, encoding: settings.encoding, protectedTerms: [...settings.protectedTerms], ...inspectTokens(text, tokenizer), metrics: calculateMetrics(text, text, tokenizer.count, settings.protectedTerms), protection: protectedSpans(text, settings.protectedTerms) };
             }
+            else if (action === 'study')
+                result = await runStudy(text, request.studyKind!, settings, runExperiment, progress);
             else
                 result = await runExperiment(text, request.methods ?? ['baseline'], settings, progress);
             self.postMessage({ id, result });

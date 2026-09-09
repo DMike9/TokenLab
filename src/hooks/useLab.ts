@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import type { Encoding, Method, Metrics, Run, Settings, Span, TokenInfo } from '../engine/types.js';
+import type { Encoding, Method, Metrics, Run, Settings, Span, StudyKind, TokenInfo } from '../engine/types.js';
 export interface Analysis {
     input: string;
     encoding: Encoding;
@@ -66,13 +66,13 @@ export function useLab() {
         worker.current = w;
         return w;
     };
-    const request = <T,>(action: 'analyze' | 'run' | 'embeddings' | 'clear', settings: Settings, text?: string, methods?: Method[]): Promise<T> => {
+    const request = <T,>(action: 'analyze' | 'run' | 'study' | 'embeddings' | 'clear', settings: Settings, text?: string, methods?: Method[], studyKind?: StudyKind): Promise<T> => {
         const id = ++counter.current;
         return new Promise<T>((resolve, reject) => {
             try {
                 const w = ensure();
                 pending.current.set(id, { resolve: v => resolve(v as T), reject });
-                w.postMessage({ id, action, settings, text, methods });
+                w.postMessage({ id, action, settings, text, methods, studyKind });
             }
             catch (error) {
                 pending.current.delete(id);
@@ -82,6 +82,7 @@ export function useLab() {
     };
     return { progress, stop, analyze: (text: string, settings: Settings) => request<Analysis>('analyze', settings, text),
         run: (text: string, methods: Method[], settings: Settings) => request<Run>('run', settings, text, methods),
+        study: (text: string, kind: StudyKind, settings: Settings) => request<Run[]>('study', settings, text, undefined, kind),
         enable: (settings: Settings) => request<boolean>('embeddings', settings), clear: (settings: Settings) => request<boolean>('clear', settings),
     };
 }

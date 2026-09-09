@@ -1467,3 +1467,65 @@ footer{
 .score-details th, .score-details td { padding: 8px; }
 .recorded-focus { margin: 12px 0; }
 .history td small { display: block; }
+
+/* Studies stay above the advanced lab, with compact summaries and optional depth. */
+.study-launch { border-color: #435c37; }
+.study-launch-main { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.study-launch-main h2 { margin: 8px 0; }
+.study-launch-main p { color: var(--muted); margin-bottom: 0; }
+.study-launch-main > button { flex-shrink: 0; padding: 15px 24px; }
+.study-presets { border-top: 1px solid var(--line); padding-top: 16px; margin-top: 20px; }
+.study-presets > p { margin-top: 16px; }
+.study-results { border-top: 3px solid var(--lime); scroll-margin-top: 25px; min-width: 0; }
+.study-question { font-size: 18px; max-width: 850px; line-height: 1.6; }
+.study-process { display: flex; flex-wrap: wrap; gap: 12px; font: 11px/1.7 var(--mono); color: var(--lime); padding: 14px 0 22px; }
+.study-process span { color: var(--muted); }
+.study-table table { width: 100%; }
+.study-table th, .study-table td { padding: 12px 10px; }
+.study-table caption { text-align: left; padding: 0 0 12px; font-size: 11px; color: var(--muted); }
+.study-learning { background: #162119; border-left: 3px solid var(--lime); padding: 18px 22px; margin: 22px 0; }
+.study-learning ul { margin: 12px 0 0; padding-left: 18px; font-size: 13px; line-height: 1.8; }
+.pair-comparison, .study-curves, .study-record { border-top: 1px solid var(--line); padding-top: 18px; margin-top: 18px; }
+.pair-concepts { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 22px; }
+.pair-concepts h3 { font-size: 18px; color: var(--purple); }
+.pair-concepts p { font-size: 13px; line-height: 1.8; color: var(--muted); margin-top: 12px; }
+.pair-concepts code { font-size: 12px; overflow-wrap: anywhere; }
+.decision-key { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.decision-chip { display: inline-block; font: 11px/1.6 var(--mono); padding: 5px 9px; border: 1px solid var(--line); border-radius: 5px; white-space: nowrap; }
+.sigmoid-only { color: var(--purple); border-color: #69509a; }
+.softmax-only { color: #75c9ff; border-color: #396b90; }
+.removed-by-both { color: var(--red); }
+.same-decision { color: var(--lime); }
+.chunk-comparison .table-scroll { max-height: 460px; margin-top: 18px; }
+.chunk-text { min-width: 220px; max-width: 430px; white-space: pre-wrap; font-weight: 400; }
+.chunk-text small { display: block; color: var(--muted); padding-bottom: 6px; }
+.chunk-text span { overflow-wrap: anywhere; }
+.chunk-text { text-transform: none; letter-spacing: normal; font-family: inherit; }
+.chunk-text span { display: block; font-size: 13px; line-height: 1.65; color: #e5eaf0; }
+.chunk-text small { font: 10px/1.5 var(--mono); }
+.study-record { overflow-wrap: anywhere; }
+.study-record p { margin-top: 14px; }
+.study-curves .transform-chart { max-width: 580px; margin: 22px auto; }
+.curve-legend { display: flex; flex-wrap: wrap; gap: 8px 14px; font: 10px var(--mono); }
+.softmax-example { margin-top: 20px; font-size: 12px; }
+.softmax-example table { width: 100%; table-layout: fixed; }
+.softmax-example th, .softmax-example td { padding: 8px; }
+.share-bar { display: block; height: 4px; background: var(--purple); margin-bottom: 5px; }
+.ladder { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin-bottom: 24px; }
+.ladder > * { padding: 16px; text-align: left; border: 1px solid var(--line); border-radius: 7px; }
+.ladder strong, .ladder span, .ladder small { display: block; }
+.ladder strong { font-size: 16px; margin: 4px 0 12px; }
+.ladder span, .ladder small { font-size: 11px; line-height: 1.7; color: var(--muted); }
+.ladder .selected { border-color: var(--lime); }
+.ladder-original { background: #0b1015; }
+.ladder-meter { height: 7px; position: relative; background: #35404a; margin: 12px 0; }
+.ladder-meter i { height: 100%; display: block; background: var(--lime); }
+.ladder-meter b { position: absolute; top: -3px; height: 13px; border-left: 2px solid white; }
+@media (max-width: 1100px) { .ladder { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ladder-original { grid-column: 1/-1; } }
+@media (max-width: 600px) {
+  .study-launch-main { align-items: stretch; flex-direction: column; gap: 18px; }
+  .pair-concepts, .ladder { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .study-process { gap: 7px; }
+  .study-question { font-size: 16px; }
+  .study-learning { padding: 15px; }
+}

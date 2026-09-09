@@ -363,3 +363,63 @@ Phase 3 datasets/evaluation, live Gemini, LLMLingua, new compression algorithms,
 ### Gate recommendation
 
 **PASS. SAFE TO COMMIT/PUSH after human review.** This recommends the local change set for the experimental project; it does not perform a push or authorize deployment. Stop after this hardening gate.
+
+## Phase 3 — Signature mathematical research experience
+
+Status: COMPLETE
+Date: 2026-09-09
+Commit-ready: YES
+
+### Changed
+
+Added Compare math beside the prompt workflow and three optional research presets: Why math matters, Sigmoid vs Softmax, Compression vs preservation. Added one orchard-repair teaching example with an explicit task, useful and repeated context, filler, a numeric budget and a negation. Study results show actual full-string BPE counts, savings/factor, protection, measured cosine or missing values, kept/removed chunks and budget status. Explanations describe actual ties/counts/failures; no LLM, fabricated measurements or composite score is used. README now gives the short portfolio story, user-requested first-person motivation and an actual production screenshot while retaining the AI-assistance disclosure.
+
+### Mathematical experiment design
+
+`engine/studies.ts` snapshots nested settings before any await and invokes the existing weighted hybrid runner independently. This uses current weights, selected focus and lexical or actual embedding relevance. Seven-transform and paired studies vary only transform; ladder studies vary only budget. The whole original/hash, engine version, full resolved focus/hash, fixed settings, raw features/scores, protection and chunk costs must match before a comparison is returned. Existing original-occurrence and full-string count guards still apply. A restored run without usable decisions cannot be claimed as a controlled chunk comparison. No scoring or protection algorithm was tuned for the example.
+
+The worker returns a complete group; React appends it atomically. The prior synchronous lock, operation generation and worker identity checks prevent duplicate or late results. Cancel/error publishes no partial group. Study IDs/kind/variable/index/total are optional additions to schema-2 run records and CSV. No second original snapshot is added for UI study state; tables derive from the notebook runs. Default text redaction remains intact. History still caps at 100; an evicted partial study is labeled incomplete. Final evidence version: tokenlab-0.3.0.
+
+Final polish resets the copied indicator when starting a study or selecting a study member, and labels curve parameters without confusing recorded settings with draft controls. A final strict TypeScript/production build passed (52 modules, 8.01 s); a production browser clipboard check verified both different copied content and the reset indicator. The independent curve overlay and mobile ladder were also visually inspected; those supplemental captures remain ignored.
+
+### Sigmoid vs Softmax behavior
+
+Sigmoid independently shapes a score with visible steepness/center. Softmax allocates shares over the entire original chunk set, including protected and whitespace chunks. The curve comparison uses actual engine functions; a separate four-score table illustrates temperature concentration, avoiding an independent Softmax curve. The pair view explains the different cutoff scales and shows raw/transformed values, actual decisions and all four agreement labels.
+
+With the default lexical teaching settings, sigmoid retained 51 tokens/5 chunks and softmax 88 tokens/19 chunks from 138 original tokens at a common 89-token target. Fourteen decisions differ: eleven whitespace chunks and three text-bearing chunks. Square/Exponential and Square-root/Log produced identical text. The research note identifies whitespace explicitly so the chunk counts cannot be read as useful-fact counts. No winner or task-preservation claim is made.
+
+### Compression ladder
+
+90%, 70%, 50%, 30% targets run independently from the original with the current transform and all other controls fixed. Cards show target tokens, actual tokens, actual retained fraction, met/unmet and an action to inspect the recorded diff. A lexical Linear ladder achieved 86/86/62/40 tokens; the looser two targets tied under the cutoff. A separate actual embedding/Softmax ladder achieved 124/88/64/41 tokens, with measured cosines .9831/.9489/.8894/.8302. These two ladders have different recorded scoring/transform settings and are not conflated. Protected-only tests retained the entire prompt and reported every target unmet. Selecting a swept budget no longer produces a misleading stale-controls warning; fixed-control edits still do.
+
+### Files changed
+
+- New engine studies module; optional study types; runner evidence version; CSV study fields.
+- App, useLab and worker study orchestration; new StudyResults; educational Charts; styles and one example.
+- New `tests/studies.test.ts` (16 tests), `e2e/phase3.spec.ts` (5 tests), `e2e-model/studies.spec.ts` (1 real-model test). Prior test files/assertions retained.
+- New MATH-EXPERIMENTS and curated verification/phase3 evidence (three screenshots and one JSON); README, START-HERE, ARCHITECTURE, ROADMAP, BUILD-STATUS and this log.
+- Installed from the existing package-lock.json; package dependencies and lockfile remain unchanged. Temporary configs, calculation dumps and logs remain ignored under `.cache`.
+
+### Verification
+
+Clean `npm ci` on Node 24.15.0/npm 11.12.1; final `npm run verify`: strict TypeScript, 218 Vitest, 20 mocked gateway, production build 52 modules; `npm run check:core`: 71 passed; final `npm run test:e2e`: 31 passed in 56.8 s; `npm run test:model`: 4 passed. All 48 existing independent tiktoken fixtures still pass exact IDs/decodes against the installed BPE package. Audit: zero vulnerabilities. Public-file scan, relative links, curated measurement invariants and `git diff --check` passed across 25 intended files; ignored environment/cache contents were excluded. Exact executed commands and production runs are in BUILD-STATUS. No live Gemini calls or key access.
+
+Failure history retained: a new test helper initially omitted a required protection-array argument (fixed); one desktop attempt was invalidated by a development reload while the teaching example was edited (stable-server suites reran successfully). Visual inspection prompted larger chunk text. Recorded ladder settings initially triggered a stale notice for the intentionally swept budget (fixed and explicitly tested). No prior tests were removed or relaxed.
+
+### Browser checks
+
+Inspected actual 1440×1000, 1024×768 and 390×844 renders, paired chunk decisions, curves and mobile metrics. Retained one main study, one pair and one mobile screenshot from the production preview. Full e2e includes all ten examples/70 non-model method runs, Unicode/token inspection, protection, chains, export scopes, keyboard controls, cancellation/late events and previous hardening regressions. New viewport tests observed no page-wide overflow, console/page errors or remote keyless-study requests.
+
+Final production preview passed eight representative UI flows and two actual model tests. Model tests measured all eleven study/ladder runs using Xenova/all-MiniLM-L6-v2 revision 751bff37182d3f1213fa05d7196b954e230abad9, q8/WASM; no failed download/runtime requests or external request bodies. Existing long Unicode tails still span 7/5 windows and change the measured vector. In-app browser bootstrap was unavailable (`missing field sandboxPolicy`), so installed Playwright Chromium was the fallback. Other browsers, physical devices, native browser chrome zoom and manual screen readers remain unverified.
+
+### Scientific limitations
+
+Importance and task focus are incomplete heuristics. Monotone shaping preserves a fixed raw ranking; differences arise through documented numeric cutoff and shaped-score/token-cost greedy admission. Softmax cutoff is slider/chunk count, not the same absolute scale as sigmoid. Shares include whitespace and protected chunks. Greedy selection is not globally optimal or necessarily nested across budgets. Protected occurrences are exact strings, not all facts or relationships. Embedding similarity is a local-model diagnostic proxy with pooling limits, not task correctness. No downstream answers, neural perplexity, model benchmark or validated composite score were measured.
+
+### Decisions requiring review
+
+No blocking product decision remains for the requested scope. Routine choices are explicit: studies use the current weighted hybrid settings; the existing individual Importance + math button retains its fixed-default-weight behavior. All seven studies select their final Softmax result and update that draft transform; the ladder uses the transform selected when started. The existing Softmax cutoff policy remains unchanged and documented. Studies retain schema 2 with additive optional identity fields. Human review may assess these choices with the captured examples; no extra approval was required for local implementation.
+
+### Deferred
+
+Phase 4, large benchmark datasets/campaigns, live Gemini, LLM-as-judge, LLMLingua/Python service, trained compressors, cloud/auth/database/collaboration, public deployment, raw vocabulary bytes, import/replay and composite quality scoring. No commit, push or deployment was performed. Recommendation: SAFE TO COMMIT/PUSH after human review of this local change set; this is not a deployment claim or an action to push.

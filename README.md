@@ -1,20 +1,24 @@
 # TokenLab
 
-**See what prompt compression removes. Investigate whether the information needed for the task survives.**
+**Interactive experiments in prompt compression.**
 
-TokenLab is an open-source lab for inspecting that tradeoff. It exists because a shorter prompt can lose the instruction, fact or relationship needed to answer correctly. The question is: **what disappeared, why, and does the task still work?**
+**Research question: how much can we remove before we remove information the model needs?**
 
-Try **Explore**: remove repeated background, protect a critical “Do NOT” instruction, and try a token budget that cannot fit the protected content. These use real examples and the existing compression engine. **Research** exposes all methods, mathematical controls, chains, optional browser embeddings and the experiment notebook.
+TokenLab lets you compare compression algorithms, importance scoring, Sigmoid, Softmax and token budgets while inspecting protected instructions and optional local semantic similarity. See what was removed, why it was removed and how many exact BPE tokens were saved.
 
-TokenLab can compare different definitions of task relevance against the same original prompt, making the anchor assumption visible. Research offers Auto, an original chunk you select, and the legacy final-chunk focus, alongside separate hard-protection reasons and soft-score contributions. How sensitive is compression to the definition of task relevance? These are inspectable heuristics, not evidence of better downstream answers.
+**Try it in a minute:** paste one prompt → **Analyze prompt** → **Compare math** → inspect what survives. Seven transforms share the same original, task focus, weights, tokenizer, protection and budget. Expand the Sigmoid vs Softmax comparison to see individual chunk decisions. Optional research presets add a focused pair or a 90% / 70% / 50% / 30% compression ladder.
 
-**Implemented:** exact BPE counting, transparent compression heuristics, protected-content checks, recorded result settings, visual diffs, scoped exports and local embedding measurements. **Still research:** whether compression preserves downstream task correctness. Cosine is not accuracy; protected-string retention is not complete meaning preservation. Trained compressors, benchmark datasets and a composite quality score are not implemented.
+![Actual TokenLab transform study: seven transforms, measured token counts and observations from the same original](docs/verification/phase3/research-1440.png)
 
-Implementation, debugging and test development used substantial AI assistance. This is an experimental portfolio project, with no claim of university or employer sponsorship or scientific validation. [Build evidence](docs/BUILD-STATUS.md), the [hardening report](docs/HARDENING-REPORT.md) and the [implementation log](docs/IMPLEMENTATION-LOG.md) distinguish executed checks from future work.
+## Why I built this
+
+I built TokenLab to better understand what actually happens when we try to make prompts more efficient. I wanted to make the individual decisions visible: what was removed, why it was removed, how mathematical weighting changed the decision, and what information survived.
+
+**Implemented:** exact BPE counting, transparent compression heuristics, controlled math studies, original task-focus selection, protected-content checks, visual diffs, reproducible exports and real local embedding measurements. **Still research:** whether compression preserves downstream task correctness. Cosine is not accuracy; protected-string retention is not complete meaning preservation. Trained compressors, benchmark datasets and a composite quality score remain deferred.
+
+Implementation, debugging and test development used substantial AI assistance. This is an experimental portfolio project, with no claim of university or employer sponsorship or scientific validation. Read the [mathematical experiment note](docs/MATH-EXPERIMENTS.md), [executed build evidence](docs/BUILD-STATUS.md), [hardening report](docs/HARDENING-REPORT.md) and [implementation log](docs/IMPLEMENTATION-LOG.md).
 
 To try it locally with Node 22.12+: run `npm ci`, then `npm run dev`, and open **http://127.0.0.1:5173/**. No API key is needed.
-
-![TokenLab Explore: three guided experiments using the real compression engine](docs/verification/phase1/explore-desktop.png)
 
 ## Start
 
@@ -41,7 +45,7 @@ Node 22.12+ is required. A real verified lockfile is included. The core needs no
 | Similarity guard | Tries deletions and measures cosine against a fixed original vector | Requires local model; cosine is not task-equivalence proof |
 | Weighted hybrid | Exposes positive feature weights and a redundancy penalty | Experimental weighted objective; no learned calibration |
 
-The UI includes original/compressed comparison, visual diff, protection inspection, score explanations, seven transform buttons, ordered chains, a run table, a measured-similarity Pareto view, JSON/CSV export, nine teaching examples and an optional Gemini Arena.
+The UI includes original/compressed comparison, visual diff, protection inspection, score explanations, seven-transform studies, paired Sigmoid/Softmax decisions, independent budget ladders, ordered chains, a run table, a measured compression/similarity tradeoff view, JSON/CSV export, ten teaching examples and an optional Gemini Arena.
 
 Inspected screenshots from the running application are available for [desktop](docs/verification/desktop-top.png), [mobile](docs/verification/mobile-top.png), and [real embedding results](docs/verification/production-embedding.png).
 
@@ -77,7 +81,7 @@ sigmoid:      1 / (1 + exp(-k(x-t)))
 softmax_i:    exp(x_i/T) / sum_j exp(x_j/T)
 ```
 
-Softmax is computed with a maximum subtraction for numerical stability. Its cutoff is relative to the uniform mass (cutoff / number of candidates), not the same raw numeric scale as individual transforms. Monotone functions preserve score order; differences here come from thresholding and transformed-score/token-cost greedy admission. They do not create new semantic knowledge. Ties, protection and a binding budget can make several transforms produce identical text; that is a valid result.
+Softmax is computed across all original chunks, including protected and whitespace chunks, with a maximum subtraction for numerical stability. Its cutoff is relative to the uniform mass (cutoff / number of candidates), not the same raw numeric scale as individual transforms. Monotone functions preserve score order; differences here come from thresholding and transformed-score/token-cost greedy admission. They do not create new semantic knowledge. Ties, protection and a binding budget can make several transforms produce identical text; that is a valid result.
 
 The weighted objective normalizes the sum of positive relevance, information, instruction, entity and structure weights, subtracts a redundancy penalty and clips to [0,1]. Its “information” term is based on empirical within-prompt word frequency: `-log2(p(word))`. That is **not** contextual surprisal from an autoregressive language model, and not neural perplexity. See [ARCHITECTURE](docs/ARCHITECTURE.md).
 

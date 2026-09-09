@@ -111,6 +111,8 @@ export interface TokenInfo {
     partialUtf8: boolean;
 }
 export interface Run {
+    /** Study identity only; full evidence lives on the run, without a duplicate input snapshot. */
+    study?: { id: string; kind: StudyKind; variable: 'transform' | 'budget'; index: number; total: number };
     taskFocus: TaskFocus;
     id: string;
     timestamp: string;
@@ -131,6 +133,7 @@ export interface Run {
     totalMs: number;
     stages: Stage[];
 }
+export type StudyKind = 'transforms' | 'sigmoid-softmax' | 'ladder';
 export type Count = (text: string) => number;
 export type Embed = (text: string) => Promise<{
     vector: number[];

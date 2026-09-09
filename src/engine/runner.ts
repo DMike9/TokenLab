@@ -8,7 +8,7 @@ import { vectorMetrics } from './math.js';
 import { DTYPE, MODEL, embedText, modelRevision } from '../similarity/embedding.js';
 import { resolveTaskFocus } from './taskFocus.js';
 import { validateSettings } from './settings.js';
-export const ENGINE_VERSION = 'tokenlab-0.2.1';
+export const ENGINE_VERSION = 'tokenlab-0.3.0';
 export async function hashText(text: string): Promise<string> {
     const buffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
     return Array.from(new Uint8Array(buffer), b => b.toString(16).padStart(2, '0')).join('');

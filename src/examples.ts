@@ -38,4 +38,16 @@ Return exactly BLOCK if deletion is prohibited; otherwise return ALLOW.`, expect
 Calculate (12 + 8) * 3. Return only the final integer.`, expected: '60' },
     { id: 'long', name: '08 / Longer context', lesson: 'Long inputs are chunked using the embedding tokenizer. No score is computed from only a silently truncated prefix.', text: Array.from({ length: 24 }, (_, i) => ['The background describes routine planning discussions and ordinary team coordination.', 'At this point in time, the team reviews progress in order to understand the next steps.', 'General context may help the reader but should not replace the final instruction.'][i % 3]).join('\n') + '\n\nThe actual delivery deadline is November 10, 2026. Return only the delivery deadline exactly as written. Do NOT include other dates.', expected: 'November 10, 2026' },
     { id: 'task-focus', name: '09 / Task before background', lesson: 'Compare Auto with Legacy final chunk: the task is at the beginning; the final sentence is garden background. Neither policy is assumed to produce better answers.', text: 'Summarize the orchard irrigation risk.\norchard irrigation depends on an aging pump.\norchard irrigation depends on an aging pump.\nthe pump occasionally stalls during dry weather.\na gardener grows flowers beside the orchard.\nthe garden flowers attract colorful butterflies.' },
+    { id: 'math-study', name: '10 / Same scores, different math', lesson: 'Try Compare math, then inspect Sigmoid vs Softmax. Useful pump context competes with repeated background; identical outputs are a valid observation.', text: `Write a repair recommendation for the orchard irrigation system.
+The irrigation pump occasionally stalls during dry weather.
+An aging seal allows water to escape before it reaches the trees.
+The backup pump can supply the young trees while repairs take place.
+The irrigation pump occasionally stalls during dry weather.
+Background: the orchard team discusses irrigation maintenance during planning meetings.
+The team enjoys sharing general updates about the season and the surrounding landscape.
+The team enjoys sharing general updates about the season and the surrounding landscape.
+Wildflowers beside the entrance attract butterflies on sunny afternoons.
+The repair budget is $800.
+Do NOT recommend interrupting water to the young trees.
+Return the priority and explain the tradeoff in at most 60 words.` },
 ];
