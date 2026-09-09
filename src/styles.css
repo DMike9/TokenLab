@@ -1454,3 +1454,16 @@ footer{
     padding:17px
   }
 }
+
+/* Task focus and score drill-down keep long original slices inside the panel. */
+.task-focus h3 { margin-top: 0; }
+.task-focus select { width: 100%; min-width: 0; }
+.focus-preview, .recorded-focus, .score-details { min-width: 0; overflow-wrap: anywhere; }
+.focus-preview { margin: 16px 0; padding: 12px; border: 1px solid var(--line); border-radius: 8px; }
+.focus-preview blockquote, .recorded-focus blockquote { margin: 10px 0; white-space: pre-wrap; max-height: 180px; overflow: auto; }
+.task-focus ol { max-height: 220px; overflow: auto; padding-left: 22px; font-size: 12px; }
+.score-details { margin-top: 12px; }
+.score-details table { font-size: 12px; width: 100%; }
+.score-details th, .score-details td { padding: 8px; }
+.recorded-focus { margin: 12px 0; }
+.history td small { display: block; }

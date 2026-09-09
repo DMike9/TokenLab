@@ -1,0 +1,642 @@
+{
+  "format": "tokenlab-curated-focus-evidence",
+  "schemaVersion": 1,
+  "sourceTest": "e2e/phase2.spec.ts",
+  "exampleId": "task-focus",
+  "note": "Selected fields copied from real redacted browser exports; omitted duplicate stages, timings, session IDs and whitespace-only score rows. Not a full session export. Hashes are identifiers, not anonymization.",
+  "engineVersion": "tokenlab-0.2.0",
+  "inputHash": "4276394b4dbd84ff3014f6319617259b313cfe4fd653d3881f39129776268110",
+  "originalTokens": 49,
+  "methods": [
+    "hybrid"
+  ],
+  "settings": {
+    "encoding": "o200k_base",
+    "budget": 0.65,
+    "transform": "linear",
+    "cutoff": 0.25,
+    "temperature": 0.25,
+    "steepness": 10,
+    "center": 0.5,
+    "semanticFloor": 0.95,
+    "redundancyThreshold": 1,
+    "ngramSize": 3,
+    "minimumRepetitions": 2,
+    "protectedTerms": [],
+    "useEmbeddings": false,
+    "weights": {
+      "relevance": 0.25,
+      "information": 0.25,
+      "instruction": 0.2,
+      "entity": 0.15,
+      "structure": 0.15,
+      "redundancy": 0.3
+    }
+  },
+  "experiments": [
+    {
+      "outputHash": "ecd9f09641d9128674363fb7580121d553f76ad281b75d033cff2d88aee4db3e",
+      "taskFocus": {
+        "algorithm": "task-focus-v1",
+        "policy": "auto",
+        "chunkIndex": 0,
+        "chunkId": "0:0:38:cef58ad9",
+        "start": 0,
+        "end": 38,
+        "reason": "Instruction-like imperative (+4); Detected protected instruction (+1). Highest heuristic score; ties choose the earliest original chunk.",
+        "fallback": "none",
+        "candidates": [
+          {
+            "chunkIndex": 0,
+            "chunkId": "0:0:38:cef58ad9",
+            "score": 5,
+            "reasons": [
+              "Instruction-like imperative (+4)",
+              "Detected protected instruction (+1)"
+            ]
+          }
+        ],
+        "textHash": "58a4d571339a6aae67eb2b27a16292e9fd1493663402c969c039c5a653123079"
+      },
+      "compressedTokens": 28,
+      "protectedTotal": 1,
+      "protectedRetained": 1,
+      "budgetMet": true,
+      "decisions": [
+        {
+          "index": 0,
+          "tokens": 8,
+          "kept": true,
+          "hardProtected": true,
+          "hardProtectionReasons": [
+            "Explicit instruction (heuristic)"
+          ],
+          "originalScore": 0.6471661543487659,
+          "transformedScore": 0.6471661543487659,
+          "features": {
+            "relevance": 1,
+            "information": 0.7886646173950639,
+            "instruction": 1,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "contributions": {
+            "relevance": 0.25,
+            "information": 0.19716615434876597,
+            "instruction": 0.2,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "rawScore": 0.6471661543487659,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "lexical-cosine"
+        },
+        {
+          "index": 2,
+          "tokens": 9,
+          "kept": false,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.23921948117467473,
+          "transformedScore": 0.23921948117467473,
+          "features": {
+            "relevance": 0.3380617018914066,
+            "information": 0.7521495561406256,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0.1111111111111111
+          },
+          "contributions": {
+            "relevance": 0.08451542547285165,
+            "information": 0.1880373890351564,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": -0.03333333333333333
+          },
+          "rawScore": 0.23921948117467473,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "lexical-cosine"
+        },
+        {
+          "index": 4,
+          "tokens": 9,
+          "kept": false,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0,
+          "transformedScore": 0,
+          "features": {
+            "relevance": 0.3380617018914066,
+            "information": 0.7521495561406256,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 1
+          },
+          "contributions": {
+            "relevance": 0.08451542547285165,
+            "information": 0.1880373890351564,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": -0.3
+          },
+          "rawScore": -0.027447185491991932,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "lexical-cosine"
+        },
+        {
+          "index": 6,
+          "tokens": 8,
+          "kept": true,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.2680335629510351,
+          "transformedScore": 0.2680335629510351,
+          "features": {
+            "relevance": 0.1690308509457033,
+            "information": 0.9031034008584371,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "contributions": {
+            "relevance": 0.042257712736425826,
+            "information": 0.22577585021460927,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "rawScore": 0.2680335629510351,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "lexical-cosine"
+        },
+        {
+          "index": 8,
+          "tokens": 8,
+          "kept": true,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.26739631365436295,
+          "transformedScore": 0.26739631365436295,
+          "features": {
+            "relevance": 0.3380617018914066,
+            "information": 0.8648568860593785,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0.1111111111111111
+          },
+          "contributions": {
+            "relevance": 0.08451542547285165,
+            "information": 0.21621422151484462,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": -0.03333333333333333
+          },
+          "rawScore": 0.26739631365436295,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "lexical-cosine"
+        },
+        {
+          "index": 10,
+          "tokens": 7,
+          "kept": true,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.2719935015191551,
+          "transformedScore": 0.2719935015191551,
+          "features": {
+            "relevance": 0.18257418583505536,
+            "information": 0.905399820241565,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "contributions": {
+            "relevance": 0.04564354645876384,
+            "information": 0.22634995506039124,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "rawScore": 0.2719935015191551,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "lexical-cosine"
+        }
+      ]
+    },
+    {
+      "outputHash": "ecd9f09641d9128674363fb7580121d553f76ad281b75d033cff2d88aee4db3e",
+      "taskFocus": {
+        "algorithm": "task-focus-v1",
+        "policy": "legacy",
+        "chunkIndex": 10,
+        "chunkId": "10:223:271:e3800131",
+        "start": 223,
+        "end": 271,
+        "reason": "Legacy assumption: final nonempty chunk of the original prompt.",
+        "fallback": "none",
+        "candidates": [
+          {
+            "chunkIndex": 0,
+            "chunkId": "0:0:38:cef58ad9",
+            "score": 5,
+            "reasons": [
+              "Instruction-like imperative (+4)",
+              "Detected protected instruction (+1)"
+            ]
+          }
+        ],
+        "textHash": "2e2769a4a201c9ca5ef1290b02d316e63a6015d195d58f1ba4645f015e4949c6"
+      },
+      "compressedTokens": 28,
+      "protectedTotal": 1,
+      "protectedRetained": 1,
+      "budgetMet": true,
+      "decisions": [
+        {
+          "index": 0,
+          "tokens": 8,
+          "kept": true,
+          "hardProtected": true,
+          "hardProtectionReasons": [
+            "Explicit instruction (heuristic)"
+          ],
+          "originalScore": 0.4428097008075298,
+          "transformedScore": 0.4428097008075298,
+          "features": {
+            "relevance": 0.18257418583505536,
+            "information": 0.7886646173950639,
+            "instruction": 1,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "contributions": {
+            "relevance": 0.04564354645876384,
+            "information": 0.19716615434876597,
+            "instruction": 0.2,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "rawScore": 0.4428097008075298,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "lexical-cosine"
+        },
+        {
+          "index": 2,
+          "tokens": 9,
+          "kept": false,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.15470405570182308,
+          "transformedScore": 0.15470405570182308,
+          "features": {
+            "relevance": 0,
+            "information": 0.7521495561406256,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0.1111111111111111
+          },
+          "contributions": {
+            "relevance": 0,
+            "information": 0.1880373890351564,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": -0.03333333333333333
+          },
+          "rawScore": 0.15470405570182308,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "lexical-cosine"
+        },
+        {
+          "index": 4,
+          "tokens": 9,
+          "kept": false,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0,
+          "transformedScore": 0,
+          "features": {
+            "relevance": 0,
+            "information": 0.7521495561406256,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 1
+          },
+          "contributions": {
+            "relevance": 0,
+            "information": 0.1880373890351564,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": -0.3
+          },
+          "rawScore": -0.11196261096484358,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "lexical-cosine"
+        },
+        {
+          "index": 6,
+          "tokens": 8,
+          "kept": true,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.26435168770513223,
+          "transformedScore": 0.26435168770513223,
+          "features": {
+            "relevance": 0.1543033499620919,
+            "information": 0.9031034008584371,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "contributions": {
+            "relevance": 0.03857583749052298,
+            "information": 0.22577585021460927,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "rawScore": 0.26435168770513223,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "lexical-cosine"
+        },
+        {
+          "index": 8,
+          "tokens": 8,
+          "kept": true,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.26003256316255724,
+          "transformedScore": 0.26003256316255724,
+          "features": {
+            "relevance": 0.3086066999241838,
+            "information": 0.8648568860593785,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0.1111111111111111
+          },
+          "contributions": {
+            "relevance": 0.07715167498104596,
+            "information": 0.21621422151484462,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": -0.03333333333333333
+          },
+          "rawScore": 0.26003256316255724,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "lexical-cosine"
+        },
+        {
+          "index": 10,
+          "tokens": 7,
+          "kept": true,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.47634995506039124,
+          "transformedScore": 0.47634995506039124,
+          "features": {
+            "relevance": 1,
+            "information": 0.905399820241565,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "contributions": {
+            "relevance": 0.25,
+            "information": 0.22634995506039124,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "rawScore": 0.47634995506039124,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "lexical-cosine"
+        }
+      ]
+    },
+    {
+      "outputHash": "aab76cdc6797162932905bb40575c9f49e74f70721794fcab4b91b0c728b6c0e",
+      "taskFocus": {
+        "algorithm": "task-focus-v1",
+        "policy": "user",
+        "chunkIndex": 2,
+        "chunkId": "2:39:83:5614458b",
+        "start": 39,
+        "end": 83,
+        "reason": "User selected an original prompt chunk; selection does not establish task correctness.",
+        "fallback": "none",
+        "candidates": [
+          {
+            "chunkIndex": 0,
+            "chunkId": "0:0:38:cef58ad9",
+            "score": 5,
+            "reasons": [
+              "Instruction-like imperative (+4)",
+              "Detected protected instruction (+1)"
+            ]
+          }
+        ],
+        "textHash": "995894831bbb3d752f5a6badf74e9e7b4b68a1dfa8473938b9e61330817c8e55"
+      },
+      "compressedTokens": 24,
+      "protectedTotal": 1,
+      "protectedRetained": 1,
+      "budgetMet": true,
+      "decisions": [
+        {
+          "index": 0,
+          "tokens": 8,
+          "kept": true,
+          "hardProtected": true,
+          "hardProtectionReasons": [
+            "Explicit instruction (heuristic)"
+          ],
+          "originalScore": 0.48168157982161763,
+          "transformedScore": 0.48168157982161763,
+          "features": {
+            "relevance": 0.3380617018914066,
+            "information": 0.7886646173950639,
+            "instruction": 1,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "contributions": {
+            "relevance": 0.08451542547285165,
+            "information": 0.19716615434876597,
+            "instruction": 0.2,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "rawScore": 0.48168157982161763,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "lexical-cosine"
+        },
+        {
+          "index": 2,
+          "tokens": 9,
+          "kept": true,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.4047040557018231,
+          "transformedScore": 0.4047040557018231,
+          "features": {
+            "relevance": 1,
+            "information": 0.7521495561406256,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0.1111111111111111
+          },
+          "contributions": {
+            "relevance": 0.25,
+            "information": 0.1880373890351564,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": -0.03333333333333333
+          },
+          "rawScore": 0.4047040557018231,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "lexical-cosine"
+        },
+        {
+          "index": 4,
+          "tokens": 9,
+          "kept": false,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.13803738903515644,
+          "transformedScore": 0.13803738903515644,
+          "features": {
+            "relevance": 1,
+            "information": 0.7521495561406256,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 1
+          },
+          "contributions": {
+            "relevance": 0.25,
+            "information": 0.1880373890351564,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": -0.3
+          },
+          "rawScore": 0.13803738903515644,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "lexical-cosine"
+        },
+        {
+          "index": 6,
+          "tokens": 8,
+          "kept": true,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.261490135928895,
+          "transformedScore": 0.261490135928895,
+          "features": {
+            "relevance": 0.14285714285714285,
+            "information": 0.9031034008584371,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "contributions": {
+            "relevance": 0.03571428571428571,
+            "information": 0.22577585021460927,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "rawScore": 0.261490135928895,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "lexical-cosine"
+        },
+        {
+          "index": 8,
+          "tokens": 8,
+          "kept": false,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.21859517389579702,
+          "transformedScore": 0.21859517389579702,
+          "features": {
+            "relevance": 0.14285714285714285,
+            "information": 0.8648568860593785,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0.1111111111111111
+          },
+          "contributions": {
+            "relevance": 0.03571428571428571,
+            "information": 0.21621422151484462,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": -0.03333333333333333
+          },
+          "rawScore": 0.21859517389579702,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "lexical-cosine"
+        },
+        {
+          "index": 10,
+          "tokens": 7,
+          "kept": false,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.22634995506039124,
+          "transformedScore": 0.22634995506039124,
+          "features": {
+            "relevance": 0,
+            "information": 0.905399820241565,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "contributions": {
+            "relevance": 0,
+            "information": 0.22634995506039124,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "rawScore": 0.22634995506039124,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "lexical-cosine"
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

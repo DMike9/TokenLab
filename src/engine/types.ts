@@ -10,6 +10,7 @@ export interface Weights {
     redundancy: number;
 }
 export interface Settings {
+    taskFocus: { policy: 'auto' | 'user' | 'legacy'; chunkId: string | null };
     encoding: Encoding;
     budget: number;
     transform: Transform;
@@ -26,6 +27,7 @@ export interface Settings {
     useEmbeddings: boolean;
 }
 export const DEFAULTS: Settings = {
+    taskFocus: { policy: 'auto', chunkId: null },
     encoding: 'o200k_base', budget: 0.65, transform: 'linear', cutoff: 0.25, temperature: 0.25, steepness: 10, center: 0.5,
     semanticFloor: 0.95, redundancyThreshold: 1, ngramSize: 3, minimumRepetitions: 2, protectedTerms: [], useEmbeddings: false,
     weights: { relevance: 0.25, information: 0.25, instruction: 0.2, entity: 0.15, structure: 0.15, redundancy: 0.3 },
@@ -37,6 +39,8 @@ export interface Span {
     reason: string;
 }
 export interface Chunk {
+    hardProtected: boolean;
+    hardProtectionReasons: string[];
     index: number;
     start: number;
     end: number;
@@ -44,6 +48,9 @@ export interface Chunk {
     reasons: string[];
 }
 export interface Decision {
+    hardProtected: boolean;
+    hardProtectionReasons: string[];
+    scoring?: ScoreBreakdown;
     index: number;
     text: string;
     originalScore: number;
@@ -91,6 +98,7 @@ export interface StrategyOutput {
     attempts?: number;
 }
 export interface Stage {
+    decisions: Decision[];
     method: Method;
     beforeTokens: number;
     afterTokens: number;
@@ -103,6 +111,7 @@ export interface TokenInfo {
     partialUtf8: boolean;
 }
 export interface Run {
+    taskFocus: TaskFocus;
     id: string;
     timestamp: string;
     engineVersion: string;
@@ -128,6 +137,9 @@ export type Embed = (text: string) => Promise<{
     chunks: number;
 }>;
 export interface Context {
+    embeddingModel?: { model: string; revision: string; dtype: string };
+    /** Resolved once from the original prompt, never re-anchored to a chain result. */
+    taskFocus?: TaskFocus;
     count: Count;
     settings: Settings;
     embed?: Embed;
@@ -141,3 +153,35 @@ export interface Strategy {
     compress: (text: string, context: Context) => Promise<StrategyOutput>;
 }
 export const MAX_CHARACTERS = 60000;
+
+export interface TaskCandidate {
+    chunkIndex: number;
+    chunkId: string;
+    score: number;
+    reasons: string[];
+}
+export interface TaskFocus {
+    algorithm: 'task-focus-v1';
+    policy: Settings['taskFocus']['policy'];
+    chunkIndex: number | null;
+    chunkId: string | null;
+    start: number | null;
+    end: number | null;
+    text: string;
+    /** SHA-256 populated by the runner; preview uses only the stable chunk identifier. */
+    textHash?: string;
+    reason: string;
+    fallback: 'none' | 'legacy-final-chunk' | 'empty-input';
+    candidates: TaskCandidate[];
+}
+export interface ScoreBreakdown {
+    embeddingModel?: { model: string; revision: string; dtype: string };
+    features: Weights;
+    weights: Weights;
+    /** Positive terms already divided by positiveWeightSum; redundancy is negative. */
+    contributions: Weights;
+    positiveWeightSum: number;
+    rawScore: number;
+    relevanceMetric: 'lexical-cosine' | 'embedding-cosine' | 'missing-empty-text';
+    focusId: string | null;
+}

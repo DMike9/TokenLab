@@ -1,0 +1,673 @@
+{
+  "format": "tokenlab-curated-focus-evidence",
+  "schemaVersion": 1,
+  "sourceTest": "e2e-model/embedding.spec.ts",
+  "exampleId": "task-focus",
+  "note": "Selected fields copied from real redacted browser exports; omitted duplicate stages, timings, session IDs and whitespace-only score rows. Not a full session export. Hashes are identifiers, not anonymization.",
+  "engineVersion": "tokenlab-0.2.0",
+  "inputHash": "4276394b4dbd84ff3014f6319617259b313cfe4fd653d3881f39129776268110",
+  "originalTokens": 49,
+  "methods": [
+    "hybrid"
+  ],
+  "settings": {
+    "encoding": "o200k_base",
+    "budget": 0.65,
+    "transform": "linear",
+    "cutoff": 0.25,
+    "temperature": 0.25,
+    "steepness": 10,
+    "center": 0.5,
+    "semanticFloor": 0.95,
+    "redundancyThreshold": 1,
+    "ngramSize": 3,
+    "minimumRepetitions": 2,
+    "protectedTerms": [],
+    "useEmbeddings": true,
+    "weights": {
+      "relevance": 0.25,
+      "information": 0.25,
+      "instruction": 0.2,
+      "entity": 0.15,
+      "structure": 0.15,
+      "redundancy": 0.3
+    }
+  },
+  "experiments": [
+    {
+      "outputHash": "a10cb066bda02bae554eb4d497db044fce9d3c7308715e4944a7a4db68bf0af7",
+      "taskFocus": {
+        "algorithm": "task-focus-v1",
+        "policy": "auto",
+        "chunkIndex": 0,
+        "chunkId": "0:0:38:cef58ad9",
+        "start": 0,
+        "end": 38,
+        "reason": "Instruction-like imperative (+4); Detected protected instruction (+1). Highest heuristic score; ties choose the earliest original chunk.",
+        "fallback": "none",
+        "candidates": [
+          {
+            "chunkIndex": 0,
+            "chunkId": "0:0:38:cef58ad9",
+            "score": 5,
+            "reasons": [
+              "Instruction-like imperative (+4)",
+              "Detected protected instruction (+1)"
+            ]
+          }
+        ],
+        "textHash": "58a4d571339a6aae67eb2b27a16292e9fd1493663402c969c039c5a653123079"
+      },
+      "compressedTokens": 30,
+      "protectedTotal": 1,
+      "protectedRetained": 1,
+      "budgetMet": true,
+      "decisions": [
+        {
+          "index": 0,
+          "tokens": 8,
+          "kept": true,
+          "hardProtected": true,
+          "hardProtectionReasons": [
+            "Explicit instruction (heuristic)"
+          ],
+          "originalScore": 0.6471661543487659,
+          "transformedScore": 0.6471661543487659,
+          "features": {
+            "relevance": 1,
+            "information": 0.7886646173950639,
+            "instruction": 1,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "contributions": {
+            "relevance": 0.25,
+            "information": 0.19716615434876597,
+            "instruction": 0.2,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "rawScore": 0.6471661543487659,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "embedding-cosine"
+        },
+        {
+          "index": 2,
+          "tokens": 9,
+          "kept": true,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.32696103680092037,
+          "transformedScore": 0.32696103680092037,
+          "features": {
+            "relevance": 0.689027924396389,
+            "information": 0.7521495561406256,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0.1111111111111111
+          },
+          "contributions": {
+            "relevance": 0.17225698109909726,
+            "information": 0.1880373890351564,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": -0.03333333333333333
+          },
+          "rawScore": 0.32696103680092037,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "embedding-cosine"
+        },
+        {
+          "index": 4,
+          "tokens": 9,
+          "kept": false,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.060294370134253705,
+          "transformedScore": 0.060294370134253705,
+          "features": {
+            "relevance": 0.689027924396389,
+            "information": 0.7521495561406256,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 1
+          },
+          "contributions": {
+            "relevance": 0.17225698109909726,
+            "information": 0.1880373890351564,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": -0.3
+          },
+          "rawScore": 0.060294370134253705,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "embedding-cosine"
+        },
+        {
+          "index": 6,
+          "tokens": 8,
+          "kept": false,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.2673794683646037,
+          "transformedScore": 0.2673794683646037,
+          "features": {
+            "relevance": 0.1664144725999776,
+            "information": 0.9031034008584371,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "contributions": {
+            "relevance": 0.0416036181499944,
+            "information": 0.22577585021460927,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "rawScore": 0.2673794683646037,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "embedding-cosine"
+        },
+        {
+          "index": 8,
+          "tokens": 8,
+          "kept": true,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.2907177941962168,
+          "transformedScore": 0.2907177941962168,
+          "features": {
+            "relevance": 0.43134762405882204,
+            "information": 0.8648568860593785,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0.1111111111111111
+          },
+          "contributions": {
+            "relevance": 0.10783690601470551,
+            "information": 0.21621422151484462,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": -0.03333333333333333
+          },
+          "rawScore": 0.2907177941962168,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "embedding-cosine"
+        },
+        {
+          "index": 10,
+          "tokens": 7,
+          "kept": true,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.26526183935663084,
+          "transformedScore": 0.26526183935663084,
+          "features": {
+            "relevance": 0.1556475371849583,
+            "information": 0.905399820241565,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "contributions": {
+            "relevance": 0.038911884296239575,
+            "information": 0.22634995506039124,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "rawScore": 0.26526183935663084,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "embedding-cosine"
+        }
+      ],
+      "similarity": {
+        "cosine": 0.9693033321447896,
+        "dot": 0.9693033321447896,
+        "euclidean": 0.24777678606039935,
+        "manhattan": 3.931476782136075,
+        "originalChunks": 1,
+        "compressedChunks": 1
+      }
+    },
+    {
+      "outputHash": "ab20b044cbfb172fb41b01f4d32a205bab2d1adb06a43f57d5564c95316d485d",
+      "taskFocus": {
+        "algorithm": "task-focus-v1",
+        "policy": "legacy",
+        "chunkIndex": 10,
+        "chunkId": "10:223:271:e3800131",
+        "start": 223,
+        "end": 271,
+        "reason": "Legacy assumption: final nonempty chunk of the original prompt.",
+        "fallback": "none",
+        "candidates": [
+          {
+            "chunkIndex": 0,
+            "chunkId": "0:0:38:cef58ad9",
+            "score": 5,
+            "reasons": [
+              "Instruction-like imperative (+4)",
+              "Detected protected instruction (+1)"
+            ]
+          }
+        ],
+        "textHash": "2e2769a4a201c9ca5ef1290b02d316e63a6015d195d58f1ba4645f015e4949c6"
+      },
+      "compressedTokens": 21,
+      "protectedTotal": 1,
+      "protectedRetained": 1,
+      "budgetMet": true,
+      "decisions": [
+        {
+          "index": 0,
+          "tokens": 8,
+          "kept": true,
+          "hardProtected": true,
+          "hardProtectionReasons": [
+            "Explicit instruction (heuristic)"
+          ],
+          "originalScore": 0.43607803864500555,
+          "transformedScore": 0.43607803864500555,
+          "features": {
+            "relevance": 0.1556475371849583,
+            "information": 0.7886646173950639,
+            "instruction": 1,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "contributions": {
+            "relevance": 0.038911884296239575,
+            "information": 0.19716615434876597,
+            "instruction": 0.2,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "rawScore": 0.43607803864500555,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "embedding-cosine"
+        },
+        {
+          "index": 2,
+          "tokens": 9,
+          "kept": false,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.18975813272035175,
+          "transformedScore": 0.18975813272035175,
+          "features": {
+            "relevance": 0.1402163080741147,
+            "information": 0.7521495561406256,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0.1111111111111111
+          },
+          "contributions": {
+            "relevance": 0.035054077018528675,
+            "information": 0.1880373890351564,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": -0.03333333333333333
+          },
+          "rawScore": 0.18975813272035175,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "embedding-cosine"
+        },
+        {
+          "index": 4,
+          "tokens": 9,
+          "kept": false,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0,
+          "transformedScore": 0,
+          "features": {
+            "relevance": 0.1402163080741147,
+            "information": 0.7521495561406256,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 1
+          },
+          "contributions": {
+            "relevance": 0.035054077018528675,
+            "information": 0.1880373890351564,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": -0.3
+          },
+          "rawScore": -0.07690853394631492,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "embedding-cosine"
+        },
+        {
+          "index": 6,
+          "tokens": 8,
+          "kept": false,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.22577585021460927,
+          "transformedScore": 0.22577585021460927,
+          "features": {
+            "relevance": 0,
+            "information": 0.9031034008584371,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "contributions": {
+            "relevance": 0,
+            "information": 0.22577585021460927,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "rawScore": 0.22577585021460927,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "embedding-cosine"
+        },
+        {
+          "index": 8,
+          "tokens": 8,
+          "kept": true,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.2824981298602459,
+          "transformedScore": 0.2824981298602459,
+          "features": {
+            "relevance": 0.3984689667149384,
+            "information": 0.8648568860593785,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0.1111111111111111
+          },
+          "contributions": {
+            "relevance": 0.0996172416787346,
+            "information": 0.21621422151484462,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": -0.03333333333333333
+          },
+          "rawScore": 0.2824981298602459,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "embedding-cosine"
+        },
+        {
+          "index": 10,
+          "tokens": 7,
+          "kept": true,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.47634995506039124,
+          "transformedScore": 0.47634995506039124,
+          "features": {
+            "relevance": 1,
+            "information": 0.905399820241565,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "contributions": {
+            "relevance": 0.25,
+            "information": 0.22634995506039124,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "rawScore": 0.47634995506039124,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "embedding-cosine"
+        }
+      ],
+      "similarity": {
+        "cosine": 0.8390176353352429,
+        "dot": 0.8390176353352429,
+        "euclidean": 0.567419359318586,
+        "manhattan": 8.99453073492814,
+        "originalChunks": 1,
+        "compressedChunks": 1
+      }
+    },
+    {
+      "outputHash": "a10cb066bda02bae554eb4d497db044fce9d3c7308715e4944a7a4db68bf0af7",
+      "taskFocus": {
+        "algorithm": "task-focus-v1",
+        "policy": "user",
+        "chunkIndex": 0,
+        "chunkId": "0:0:38:cef58ad9",
+        "start": 0,
+        "end": 38,
+        "reason": "User selected an original prompt chunk; selection does not establish task correctness.",
+        "fallback": "none",
+        "candidates": [
+          {
+            "chunkIndex": 0,
+            "chunkId": "0:0:38:cef58ad9",
+            "score": 5,
+            "reasons": [
+              "Instruction-like imperative (+4)",
+              "Detected protected instruction (+1)"
+            ]
+          }
+        ],
+        "textHash": "58a4d571339a6aae67eb2b27a16292e9fd1493663402c969c039c5a653123079"
+      },
+      "compressedTokens": 30,
+      "protectedTotal": 1,
+      "protectedRetained": 1,
+      "budgetMet": true,
+      "decisions": [
+        {
+          "index": 0,
+          "tokens": 8,
+          "kept": true,
+          "hardProtected": true,
+          "hardProtectionReasons": [
+            "Explicit instruction (heuristic)"
+          ],
+          "originalScore": 0.6471661543487659,
+          "transformedScore": 0.6471661543487659,
+          "features": {
+            "relevance": 1,
+            "information": 0.7886646173950639,
+            "instruction": 1,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "contributions": {
+            "relevance": 0.25,
+            "information": 0.19716615434876597,
+            "instruction": 0.2,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "rawScore": 0.6471661543487659,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "embedding-cosine"
+        },
+        {
+          "index": 2,
+          "tokens": 9,
+          "kept": true,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.32696103680092037,
+          "transformedScore": 0.32696103680092037,
+          "features": {
+            "relevance": 0.689027924396389,
+            "information": 0.7521495561406256,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0.1111111111111111
+          },
+          "contributions": {
+            "relevance": 0.17225698109909726,
+            "information": 0.1880373890351564,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": -0.03333333333333333
+          },
+          "rawScore": 0.32696103680092037,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "embedding-cosine"
+        },
+        {
+          "index": 4,
+          "tokens": 9,
+          "kept": false,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.060294370134253705,
+          "transformedScore": 0.060294370134253705,
+          "features": {
+            "relevance": 0.689027924396389,
+            "information": 0.7521495561406256,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 1
+          },
+          "contributions": {
+            "relevance": 0.17225698109909726,
+            "information": 0.1880373890351564,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": -0.3
+          },
+          "rawScore": 0.060294370134253705,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "embedding-cosine"
+        },
+        {
+          "index": 6,
+          "tokens": 8,
+          "kept": false,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.2673794683646037,
+          "transformedScore": 0.2673794683646037,
+          "features": {
+            "relevance": 0.1664144725999776,
+            "information": 0.9031034008584371,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "contributions": {
+            "relevance": 0.0416036181499944,
+            "information": 0.22577585021460927,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "rawScore": 0.2673794683646037,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "embedding-cosine"
+        },
+        {
+          "index": 8,
+          "tokens": 8,
+          "kept": true,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.2907177941962168,
+          "transformedScore": 0.2907177941962168,
+          "features": {
+            "relevance": 0.43134762405882204,
+            "information": 0.8648568860593785,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0.1111111111111111
+          },
+          "contributions": {
+            "relevance": 0.10783690601470551,
+            "information": 0.21621422151484462,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": -0.03333333333333333
+          },
+          "rawScore": 0.2907177941962168,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "embedding-cosine"
+        },
+        {
+          "index": 10,
+          "tokens": 7,
+          "kept": true,
+          "hardProtected": false,
+          "hardProtectionReasons": [],
+          "originalScore": 0.26526183935663084,
+          "transformedScore": 0.26526183935663084,
+          "features": {
+            "relevance": 0.1556475371849583,
+            "information": 0.905399820241565,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "contributions": {
+            "relevance": 0.038911884296239575,
+            "information": 0.22634995506039124,
+            "instruction": 0,
+            "entity": 0,
+            "structure": 0,
+            "redundancy": 0
+          },
+          "rawScore": 0.26526183935663084,
+          "positiveWeightSum": 1,
+          "relevanceMetric": "embedding-cosine"
+        }
+      ],
+      "similarity": {
+        "cosine": 0.9693033321447896,
+        "dot": 0.9693033321447896,
+        "euclidean": 0.24777678606039935,
+        "manhattan": 3.931476782136075,
+        "originalChunks": 1,
+        "compressedChunks": 1
+      }
+    }
+  ],
+  "errors": [],
+  "failedRequests": [],
+  "model": {
+    "model": "Xenova/all-MiniLM-L6-v2",
+    "revision": "751bff37182d3f1213fa05d7196b954e230abad9",
+    "dtype": "q8",
+    "aggregation": "model-token-weighted mean of normalized ≤254-wordpiece chunk embeddings, followed by L2 normalization"
+  }
+}

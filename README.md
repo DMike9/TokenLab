@@ -6,6 +6,8 @@ TokenLab is an open-source lab for inspecting that tradeoff. It exists because a
 
 Try **Explore**: remove repeated background, protect a critical “Do NOT” instruction, and try a token budget that cannot fit the protected content. These use real examples and the existing compression engine. **Research** exposes all methods, mathematical controls, chains, optional browser embeddings and the experiment notebook.
 
+TokenLab can compare different definitions of task relevance against the same original prompt, making the anchor assumption visible. Research offers Auto, an original chunk you select, and the legacy final-chunk focus, alongside separate hard-protection reasons and soft-score contributions. How sensitive is compression to the definition of task relevance? These are inspectable heuristics, not evidence of better downstream answers.
+
 **Implemented:** exact BPE counting, transparent compression heuristics, protected-content checks, recorded result settings, visual diffs, scoped exports and local embedding measurements. **Still research:** whether compression preserves downstream task correctness. Cosine is not accuracy; protected-string retention is not complete meaning preservation. Trained compressors, benchmark datasets and a composite quality score are not implemented.
 
 Implementation, debugging and test development used substantial AI assistance. This is an experimental portfolio project, with no claim of university or employer sponsorship or scientific validation. [Build evidence](docs/BUILD-STATUS.md) and the [implementation log](docs/IMPLEMENTATION-LOG.md) distinguish executed checks from future work.
@@ -39,7 +41,7 @@ Node 22.12+ is required. A real verified lockfile is included. The core needs no
 | Similarity guard | Tries deletions and measures cosine against a fixed original vector | Requires local model; cosine is not task-equivalence proof |
 | Weighted hybrid | Exposes positive feature weights and a redundancy penalty | Experimental weighted objective; no learned calibration |
 
-The UI includes original/compressed comparison, visual diff, protection inspection, score explanations, seven transform buttons, ordered chains, a run table, a measured-similarity Pareto view, JSON/CSV export, eight teaching examples and an optional Gemini Arena.
+The UI includes original/compressed comparison, visual diff, protection inspection, score explanations, seven transform buttons, ordered chains, a run table, a measured-similarity Pareto view, JSON/CSV export, nine teaching examples and an optional Gemini Arena.
 
 Inspected screenshots from the running application are available for [desktop](docs/verification/desktop-top.png), [mobile](docs/verification/mobile-top.png), and [real embedding results](docs/verification/production-embedding.png).
 

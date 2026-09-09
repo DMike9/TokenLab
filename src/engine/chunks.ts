@@ -13,7 +13,7 @@ export function splitChunks(text: string, protectedContent: Span[] = []): Chunk[
     return points.slice(0, -1).map((start, index) => {
         const end = points[index + 1];
         const reasons = [...new Set(protectedContent.filter(s => s.start < end && s.end > start).map(s => s.reason))];
-        return { index, start, end, text: text.slice(start, end), reasons };
+        return { index, start, end, text: text.slice(start, end), reasons, hardProtected: reasons.length > 0, hardProtectionReasons: reasons };
     });
 }
 export function assemble(chunks: Chunk[], retained: Set<number>): string {

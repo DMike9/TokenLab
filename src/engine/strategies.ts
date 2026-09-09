@@ -3,6 +3,7 @@ import { protectedSpans, transformUnprotected } from './protection.js';
 import { assemble, splitChunks } from './chunks.js';
 import { jaccard, ngrams, vectorMetrics } from './math.js';
 import { scoreChunks } from './scoring.js';
+import { resolveTaskFocus } from './taskFocus.js';
 const result = (text: string, notes: string[] = [], decisions: Decision[] = [], budgetMet: boolean | null = null): StrategyOutput => ({ text, notes, decisions, budgetMet });
 function neverExpand(original: string, candidate: string, ctx: Context, notes: string[]): StrategyOutput {
     if (ctx.count(candidate) > ctx.count(original))
@@ -34,11 +35,11 @@ const deduplicate: Strategy = { id: 'deduplicate', name: 'Redundancy', descripti
             else
                 seen.push({ exact, grams, times: 1 });
             const repeated = !!previous && previous.times >= minimum;
-            const keep = !!c.reasons.length || !repeated || !exact;
+            const keep = c.hardProtected || !repeated || !exact;
             if (keep)
                 retained.add(c.index);
             decisions.push({ index: c.index, text: c.text, originalScore: repeated ? 0 : 1, transformedScore: repeated ? 0 : 1,
-                kept: keep, protected: !!c.reasons.length, tokens: ctx.count(c.text), reason: c.reasons.length ? c.reasons.join('; ') : repeated ? `Repeated context; ${threshold === 1 ? 'exact text match' : `word ${n}-gram Jaccard ≥ ${threshold}`}` : 'First / nonmatching context occurrence' });
+                kept: keep, protected: c.hardProtected, hardProtected: c.hardProtected, hardProtectionReasons: [...c.hardProtectionReasons], tokens: ctx.count(c.text), reason: c.reasons.length ? c.reasons.join('; ') : repeated ? `Repeated context; ${threshold === 1 ? 'exact text match' : `word ${n}-gram Jaccard ≥ ${threshold}`}` : 'First / nonmatching context occurrence' });
         }
         const candidate = assemble(chunks, retained);
         if (ctx.count(candidate) > ctx.count(text))
@@ -71,16 +72,16 @@ async function importance(text: string, ctx: Context, hybrid: boolean): Promise<
         throw new Error('Embedding-guided hybrid scoring supports at most 64 chunks. Use a shorter selection.');
     const decisions = await scoreChunks(text, chunks, ctx, hybrid);
     const budget = Math.floor(ctx.count(text) * ctx.settings.budget);
-    const retained = new Set(decisions.filter(d => d.protected).map(d => d.index));
+    const retained = new Set(decisions.filter(d => d.hardProtected).map(d => d.index));
     const cutoff = ctx.settings.transform === 'softmax' ? ctx.settings.cutoff / Math.max(1, decisions.length) : ctx.settings.cutoff;
     for (const d of decisions)
-        if (!d.protected) {
+        if (!d.hardProtected) {
             d.kept = false;
             d.reason = d.transformedScore < cutoff ? 'Below shaped-score cutoff' : 'Does not fit the token budget';
         }
     // A transparent greedy heuristic, not a globally optimal knapsack solver. Dividing by variable chunk cost
     // means monotonic shaping CAN change the utility-per-token ranking without changing the raw-score ranking.
-    const candidates = decisions.filter(d => !d.protected && d.transformedScore >= cutoff)
+    const candidates = decisions.filter(d => !d.hardProtected && d.transformedScore >= cutoff)
         .sort((a, b) => b.transformedScore / Math.max(1, b.tokens) - a.transformedScore / Math.max(1, a.tokens) || a.index - b.index);
     for (const d of candidates) {
         retained.add(d.index);
@@ -93,7 +94,7 @@ async function importance(text: string, ctx: Context, hybrid: boolean): Promise<
     }
     const compressed = assemble(chunks, retained), budgetMet = ctx.count(compressed) <= budget;
     const notes = [
-        `Experimental weighted objective. Relevance uses ${hybrid && ctx.embed ? 'local embedding cosine' : 'bag-of-words cosine'}, anchored to the last nonempty chunk.`,
+        `Experimental weighted objective. Relevance uses ${hybrid && ctx.embed ? 'local embedding cosine' : 'bag-of-words cosine'} relative to the ${ctx.settings.taskFocus.policy} task focus from the original prompt. ${(ctx.taskFocus ?? resolveTaskFocus(text, ctx.settings)).reason}`,
         'Information value is empirical word-frequency surprisal within this prompt, NOT language-model entropy or perplexity.',
         'All scoring weights are heuristics. Protected chunks bypass score filtering; chunk boundaries retain surrounding context.',
         'Monotonic transforms preserve raw rank. Differences arise from a fixed cutoff and utility divided by varying chunk token cost.',
@@ -116,7 +117,7 @@ const similarity: Strategy = { id: 'similarity', name: 'Similarity guard', descr
         const decisions = await scoreChunks(text, chunks, ctx, false), retained = new Set(chunks.map(c => c.index));
         const originalVector = (await ctx.embed(text)).vector;
         const budget = Math.floor(ctx.count(text) * ctx.settings.budget);
-        const candidates = decisions.filter(d => !d.protected).sort((a, b) => a.originalScore - b.originalScore || b.index - a.index);
+        const candidates = decisions.filter(d => !d.hardProtected).sort((a, b) => a.originalScore - b.originalScore || b.index - a.index);
         let attempts = 0;
         for (const d of candidates) {
             if (ctx.count(assemble(chunks, retained)) <= budget)
@@ -148,7 +149,7 @@ const similarity: Strategy = { id: 'similarity', name: 'Similarity guard', descr
 export const STRATEGIES: Strategy[] = [baseline, minify, deduplicate, lexical, stopwords,
     { id: 'importance', name: 'Importance + math', description: 'Shape transparent heuristic scores; select within a token budget.', compress: (text, ctx) => importance(text, ctx, false) },
     similarity,
-    { id: 'hybrid', name: 'Weighted hybrid', description: 'Tune the relevance, information and protection-related feature weights.', compress: (text, ctx) => importance(text, ctx, true) },
+    { id: 'hybrid', name: 'Weighted hybrid', description: 'Tune independent soft signals; hard protection always takes priority.', compress: (text, ctx) => importance(text, ctx, true) },
 ];
 export const getStrategy = (id: Method): Strategy => { const strategy = STRATEGIES.find(s => s.id === id); if (!strategy)
     throw new Error(`Unknown method: ${id}`); return strategy; };

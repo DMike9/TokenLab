@@ -8,20 +8,52 @@ Each strategy implements the shared `Strategy` interface: ID, name, description,
 
 One worker queue processes requests serially. Cancellation terminates the worker and its model state. The optional Node gateway is a separate process and has no role in keyless experiments. The Vite dev/preview proxy routes only `/api` to it.
 
-## Scoring
+## Hard constraints, task focus and soft importance
 
 Chunks retain exact character offsets and original order. Split candidates are punctuation/line boundaries outside protected spans. No whitespace is silently reconstructed from a bag of tokens.
 
 For each chunk:
 
-- Relevance: cosine of lexical frequency vectors against the last nonempty chunk by default; local embedding cosine in model-enabled hybrid mode. The anchor assumption is visible and may be wrong.
+- Relevance: lexical frequency-vector cosine against the resolved original task focus; local embedding cosine (clamped to [0,1]) only in model-enabled hybrid mode. A focus is an experimental assumption, not task correctness.
 - Information: mean empirical word-frequency surprisal normalized by log2(total word occurrences).
-- Instruction/entity/structure: detected feature indicators, not complete linguistic labels.
+- Instruction signal: imperative/request-like language or a question mark, observed directly from chunk text.
+- Entity signal: numeric characters, acronyms, underscore identifiers, URLs or a capitalized word after the first word. This is a weak named-item indicator, not NER; it misses sentence-initial single names and can flag ordinary capitalization.
+- Structure signal: headings, list/table/indentation markers, fences, tags, JSON-like starts or a short line-start label ending in a colon. The label case can apply to eligible content; it is not a schema parser.
 - Redundancy: maximum bigram Jaccard similarity against an earlier chunk, therefore position-sensitive.
 
 The pasted product brief has a mixed-sign/bulleted hybrid formula. This implementation makes a **documented engineering interpretation**, not a literal correction: five positive feature terms divided by their positive weight sum, minus lambda times redundancy, clipped to [0,1]. Zero positive weights produce zero positive score. The engine does not claim an optimal or trained objective.
 
 All protected chunks are retained first. Eligible candidates must pass the selected transformed-score cutoff. Others are attempted in descending transformed-score / isolated-token-cost order; each admission re-tokenizes the entire reconstructed text. There is no claim to solve a global knapsack optimum. Encoding boundaries mean isolated costs are ordering heuristics only.
+
+### Task focus from the original prompt
+
+`engine/taskFocus.ts` resolves one exact original slice under a versioned `task-focus-v1` policy:
+
+- **Auto (default):** rank nonempty original chunks by imperative language (+4), question mark (+3), request-like language (+2), and existing protected-instruction detection (+1). Ties choose the earliest original chunk. Code-fence, inline-code, valid-JSON and quoted-string chunks are excluded conservatively, even when they contain other instruction-like prose. All positive candidates and reasons are recorded and inspectable.
+- **User selected:** Research offers the original chunks directly, with no second prompt/query box. The selected identifier combines chunk index, original UTF-16 offsets and a non-cryptographic content fingerprint. If an edit or protection-boundary change invalidates the choice, the preview and run explicitly record the fallback instead of silently choosing another task.
+- **Legacy final chunk:** choose the final nonempty original chunk, exposing the previous anchor assumption. Auto without a credible candidate and an invalid user selection explicitly fall back to this policy. Empty/whitespace-only input records `empty-input`, with no focus.
+
+The runner resolves focus once before any operation, records its SHA-256, and holds it fixed throughout a chain. An earlier operation can remove or rewrite an eligible focus chunk; later scoring still compares with its original text. Selecting focus does not add protection. Legacy here compares the old *anchor rule*, not a bit-for-bit Phase 1 scorer: soft features are now independent, and chain stages no longer silently re-anchor to their changed input.
+
+Chunk indexes include whitespace-only slices, so displayed indexes may skip between text-bearing options. Offsets and identifiers refer to the original chunking under the recorded protected terms. No expected/reference answer enters focus detection or compression. Auto is an English surface heuristic, not semantic understanding; user selection does not prove correctness. The task-before-background teaching example permits all policies to be compared without asserting one is best.
+
+### Independent features and contribution records
+
+Chunks/decisions explicitly carry `hardProtected` and `hardProtectionReasons`. The old `reasons`/`protected` aliases remain for compatibility, with the same values. No hard detector was weakened. Soft instruction/entity/structure functions read text directly, never protection labels. Thus an eligible question, single internal capitalized name or colon label can receive a signal. Many strong signals still co-occur with hard protection and have no influence on whether those protected chunks survive.
+
+For weights `w`, feature values `f`, and `Z = w_relevance + w_information + w_instruction + w_entity + w_structure`:
+
+```text
+positive contribution_i = w_i * f_i / Z  (0 when Z = 0)
+redundancy contribution = -w_redundancy * f_redundancy
+raw score = sum of all six contributions
+originalScore = clip(raw score, 0, 1)
+transformedScore = selected transform(originalScore)
+```
+
+Every scored decision stores feature values, actual effective weights, each normalized contribution, Z, the unclipped raw score, relevance metric and original focus ID. Model-enabled relevance also records the model ID, resolved revision and dtype independently of the final similarity measurement. Empty focus/whitespace-only chunks explicitly record `missing-empty-text` relevance with a zero contribution convention; they do not claim an embedding measurement. Importance and Similarity guard retain fixed default weights; only Weighted hybrid uses the weight sliders. Similarity guard uses the score to order deletion attempts and separately measures its original-stage embedding floor.
+
+Increasing any positive weight changes Z and rescales all other positive contributions. With no redundancy, that common rescaling alone cannot reorder fixed positive scores, though it can change cutoff admission. A fixed redundancy penalty, clipping and utility-per-token selection can change rankings/admission. Softmax includes protected and whitespace chunks in its normalization as before; protected rows still bypass filtering. No weight is a probability, necessity estimate or learned calibration. The UI rounds numbers for display; exports preserve computed values.
 
 ## Protection
 
@@ -41,6 +73,8 @@ Standalone metrics define edge cases explicitly. Empty ratios use null. Similari
 
 The comparison table is filtered by original text and encoding. The Pareto plot includes only measured similarity rows and compatible model revision/dtype. Export scope is explicit: current prompt plus selected encoding (the visible table), or the full in-memory session. Both JSON and CSV honor this selection. Raw text remains excluded by default; JSON text inclusion requires an explicit opt-in. Import/replay of experiment files is a future feature.
 
+JSON schema 2 adds resolved task focus and per-stage decisions, retaining the final-stage decision list for the result view. Redacted JSON removes focus text and decision text at every stage as well as original/compressed text and custom protected strings. CSV includes policy, stable ID, focus SHA-256, reason, fallback, detector version, weights and text-free stage scoring. Hashes/identifiers and feature records can reveal information; hashing is not anonymization. Notebook rows label focus policy/chunk; selecting a row restores that run's text, relevance and protection for comparison. The draft selector never relabels an earlier result. No chart of invented outcomes or task-performance comparison is added.
+
 ## Explore, draft controls and recorded results
 
 Explore is the initial view and runs three presets using existing examples and strategies. Research exposes the complete instrument. Switching views preserves controls and history; selecting a guide deliberately replaces the editor and draft controls with a displayed preset, with existing runs retained in memory. View preference is session-only; no persistence or telemetry was added.
@@ -55,7 +89,7 @@ Result tabs use associated tab/tabpanel IDs, roving tabindex, automatic activati
 
 The browser never receives a key. A loopback-only native Node server reads `GEMINI_API_KEY` and `GEMINI_MODEL`, validates local requests, and makes at most two text-generation calls per comparison. It sends the original and compressed prompts separately, with identical generation settings, without injecting the reference answer. It returns visible answer text, provider token usage, provider model version when reported, finish reason and local elapsed time.
 
-There is no tool use, command execution, remote URL supplied by the client, arbitrary API proxying, prompt logging, persistent database or automatic retry. A retry must be a deliberate new user request and might cost more. Local rate limits are not sufficient for a public service. Phase 2 public API use requires separate authentication, authorization, quotas, abuse controls, billing governance and an explicit privacy policy.
+There is no tool use, command execution, remote URL supplied by the client, arbitrary API proxying, prompt logging, persistent database or automatic retry. A retry must be a deliberate new user request and might cost more. Local rate limits are not sufficient for a public service. Any future public API use requires separate authentication, authorization, quotas, abuse controls, billing governance and an explicit privacy policy.
 
 ## Intentional scope decisions
 

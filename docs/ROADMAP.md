@@ -27,7 +27,7 @@ Use FastAPI and the upstream LLMLingua/LLMLingua-2 implementation in a separate 
 
 ## Gate 3: richer instrument
 
-Raw vocabulary-byte inspection; selectable query anchor; improved names/entities/schema-aware protection; reproducible import/replay; immutable dependency/model fixture capture; per-token autoregressive surprisal with real model provenance; calibrated thresholds; explicit budget allocation alternatives; model-size/download indicators; keyboard/multilingual accessibility review.
+Original-prompt task-focus selection and independent soft-score contribution inspection are implemented in Phase 2; their heuristic assumptions still need downstream evaluation. Remaining: raw vocabulary-byte inspection; improved names/entities/schema-aware protection; reproducible import/replay; immutable dependency/model fixture capture; per-token autoregressive surprisal with real model provenance; calibrated thresholds; explicit budget allocation alternatives; model-size/download indicators; keyboard/multilingual accessibility review.
 
 ## Deliberate non-goals for the first release
 

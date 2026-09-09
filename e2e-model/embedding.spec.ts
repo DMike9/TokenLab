@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { readFile, writeFile } from 'node:fs/promises';
 import type { Run } from '../src/engine/types.js';
+import { originalChunks } from '../src/engine/taskFocus.js';
 
 test('real public model downloads and browser-worker inference', async ({ page }, info) => {
     const errors: string[] = [], network: string[] = [];
@@ -74,4 +75,53 @@ test('long Unicode tails affect real worker embeddings beyond the first window',
     const cosine = tails.a.vector.reduce((sum, v, i) => sum + v * tails.b.vector[i], 0);
     expect(cosine).toBeLessThan(.99);
     await writeFile(info.outputPath('tail-evidence.json'), JSON.stringify({ revision: tails.revision, aChunks: tails.a.chunks, bChunks: tails.b.chunks, cosine }, null, 2));
+});
+
+test('task focus controls real embedding relevance without changing the prompt', async ({ page }, info) => {
+    const errors: string[] = [], network: string[] = [];
+    page.on('pageerror', e => errors.push(e.message));
+    page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+    page.on('requestfailed', r => network.push(`${r.url().split('?')[0]}: ${r.failure()?.errorText}`));
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Research', exact: true }).click();
+    await page.getByLabel('Load example').selectOption('task-focus');
+    const original = await page.getByLabel('Original prompt', { exact: true }).inputValue();
+    await page.getByRole('button', { name: 'Download / enable local embeddings', exact: true }).click();
+    await expect(page.locator('.statusbar')).toContainText('Local embeddings ready', { timeout: 240000 });
+    for (const policy of ['auto', 'legacy', 'user']) {
+        await page.getByLabel('Task-focus policy', { exact: true }).selectOption(policy);
+        if (policy === 'user') {
+            const select = page.getByLabel('Original chunk for task focus', { exact: true });
+            await select.selectOption((await select.locator('option').filter({ hasText: 'Summarize the orchard' }).getAttribute('value'))!);
+        }
+        await page.locator('.method-card').filter({ hasText: 'Weighted hybrid' }).click();
+        await expect(page.locator('.statusbar')).toContainText('complete', { timeout: 120000 });
+    }
+    await expect(page.getByLabel('Original prompt', { exact: true })).toHaveValue(original);
+    const pending = page.waitForEvent('download');
+    await page.getByRole('button', { name: 'Export JSON', exact: true }).click();
+    const exported = JSON.parse(await readFile((await (await pending).path())!, 'utf8'));
+    const runs = exported.experiments as Run[];
+    expect(runs.map(r => r.taskFocus.policy)).toEqual(['auto', 'legacy', 'user']);
+    expect(new Set(runs.map(r => r.inputHash)).size).toBe(1);
+    for (const run of runs) {
+        expect(run.similarityError).toBeNull();
+        expect(run.similarity?.revision).toMatch(/^[a-f0-9]{40}$/);
+        expect(run.metrics.protectedRetained).toBe(run.metrics.protectedTotal);
+        for (const d of run.decisions) {
+            const content = originalChunks(original, [])[d.index].text.trim();
+            expect(d.scoring!.relevanceMetric).toBe(content ? 'embedding-cosine' : 'missing-empty-text');
+            expect(d.scoring!.embeddingModel).toEqual({ model: 'Xenova/all-MiniLM-L6-v2', revision: run.similarity!.revision, dtype: 'q8' });
+            expect(d.scoring!.focusId).toBe(run.taskFocus.chunkId);
+        }
+    }
+    const relevance = (r: Run) => r.decisions[0].scoring!.features.relevance;
+    expect(relevance(runs[0])).toBeGreaterThan(.999);
+    expect(relevance(runs[0])).toBeGreaterThan(relevance(runs[1]));
+    expect(relevance(runs[0])).toBeCloseTo(relevance(runs[2]), 6);
+    await page.locator('.score-details').first().locator('summary').click();
+    await page.locator('.results').screenshot({ path: info.outputPath('focus-embedding.png') });
+    expect(errors).toEqual([]);
+    expect(network).toEqual([]);
+    await writeFile(info.outputPath('focus-embedding-evidence.json'), JSON.stringify({ exported, errors, network }, null, 2));
 });

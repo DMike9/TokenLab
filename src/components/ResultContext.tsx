@@ -2,6 +2,7 @@ import type { Method, Run, Settings } from '../engine/types.js';
 import { DEFAULTS } from '../engine/types.js';
 import { getStrategy } from '../engine/strategies.js';
 import { protectedSpans } from '../engine/protection.js';
+import { focusLabel } from './TaskFocusControls.js';
 
 export function settingsChanged(run: Run, settings: Settings, methods: Method[]): boolean {
     // Compare every draft control conservatively, including controls unused by the current method.
@@ -19,12 +20,14 @@ export function ResultContext({ run, changed }: { run: Run; changed: boolean }) 
             <dl>
                 <div><dt>Method / chain</dt><dd>{run.methods.map(m => getStrategy(m).name).join(' → ')}</dd></div>
                 <div><dt>Tokenizer</dt><dd>{run.settings.encoding}</dd></div>
+                <div><dt>Task focus</dt><dd>{focusLabel(run.taskFocus.policy)} · {run.taskFocus.chunkIndex == null ? 'no chunk' : `original chunk ${run.taskFocus.chunkIndex + 1}`}{run.taskFocus.fallback !== 'none' && ' · fallback'}{!budget && ' (not applied by this method)'}</dd></div>
                 <div><dt>Token budget</dt><dd>{budget ? `${(run.settings.budget * 100).toFixed(0)}% retained${run.stages.length > 1 ? ' of each budgeted stage’s input' : ''}` : 'Not applied by this method'}</dd></div>
                 <div><dt>Transform</dt><dd>{run.settings.transform}{!shaped && ' (not applied)'}</dd></div>
                 <div><dt>Score cutoff</dt><dd>{shaped ? `${run.settings.cutoff}${run.settings.transform === 'softmax' ? ' / chunk count (softmax share)' : ''}` : 'Not applied'}</dd></div>
                 <div><dt>Semantic floor</dt><dd>{run.methods.includes('similarity') ? `${run.settings.semanticFloor} cosine` : 'Not applied'}</dd></div>
                 <div><dt>Embedding model</dt><dd>{run.similarity ? `${run.similarity.model} · ${run.similarity.dtype} · revision ${run.similarity.revision}` : 'Not measured for this run'}</dd></div>
             </dl>
+            <details className="recorded-focus"><summary>Recorded task focus</summary><blockquote>{run.taskFocus.text || 'No task focus available.'}</blockquote><p className="fineprint">{run.taskFocus.reason}</p><p className="fineprint">Focus SHA-256: {run.taskFocus.textHash}</p></details>
             {run.stages.length > 1 && <p className="fineprint">Each budgeted stage uses its own input. The budget status below describes the final stage; total savings compare with the original prompt.</p>}
             <details><summary>All recorded settings</summary><pre>{JSON.stringify(run.settings, null, 2)}</pre></details>
         </div>

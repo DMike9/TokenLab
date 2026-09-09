@@ -1,12 +1,34 @@
 # Build status: locally verified development build
 
+## Phase 2 — Task focus and interpretable importance — 2026-09-08
+
+**COMPLETE; ready for human commit/push.** Auto/user-selected/legacy original-prompt focus, separate hard protection and soft features, contribution inspection, notebook comparison and schema-2 exports are implemented. Full audit, failure history, decisions and limitations: [Phase 2 implementation log](IMPLEMENTATION-LOG.md#phase-2--task-focus-and-interpretable-importance).
+
+| Command actually run | Actual result |
+| --- | --- |
+| `npm test -- tests/scoring-audit.test.ts`, before production changes | **7/7 passed** after correcting fixture assumptions about chunk boundaries. |
+| `npm run verify`, final | Passed strict TypeScript, **164/164 unit/integration tests**, **14/14 mocked gateway tests**, and production build (49 modules; 9.40 s). |
+| `npm run check:core` | **71/71 passed**. These counters remain pure-engine test seams. |
+| `npm run test:e2e`, final | **17/17 passed** (55.0 s); includes all Phase 1 regressions, nine-example/63-experiment BPE checks, task-focus comparison, safe redaction, visible weight sliders and recorded notebook restoration. |
+| `npm run test:model` | **3/3 passed** (50.3 s): real browser-worker inference, full long Unicode inputs and all three focus policies with actual embedding relevance. |
+| `npm audit` | **0 vulnerabilities**. Dependencies and lockfile unchanged. |
+| `node .cache/capture-phase2.mjs` | Actual desktop/mobile Chromium captures; no page-wide overflow at 1440×1000 or 390×844. |
+| `git diff --exit-code -- package.json package-lock.json src/engine/protection.ts .github` / `git diff --check` | Unchanged dependencies, hard detector and workflows / clean diff formatting (existing Windows normalization notices only). |
+| HTTP GET `http://127.0.0.1:5173/` | **200**, existing Vite server; project remains runnable with `npm run dev`. |
+
+Inspected the desktop/mobile controls, results and notebook. The curated public set retains [desktop Research](verification/phase2/research-1440.png), [mobile contributions](verification/phase2/scores-390.png), and the distinct [policy-comparison notebook](verification/phase2/notebook-1440.png); model results remain in compact measurement evidence below. Phase 2 browser instrumentation recorded no page/console errors; model tests recorded no failed requests. The in-app browser bootstrap remained unavailable (`missing field sandboxPolicy`); installed Playwright Chromium provided the evidence.
+
+Model **Xenova/all-MiniLM-L6-v2**, q8/WASM, revision **751bff37182d3f1213fa05d7196b954e230abad9**. [Actual focus/model measurements](verification/phase2/focus-embedding-evidence.json) record Auto/user-first-chunk output at 30 tokens and Legacy at 21 (49 original), with cosine 0.9693 and 0.8390 respectively. These do not establish task correctness or a globally better policy. [Long-tail measurements](verification/phase2/tail-evidence.json) retain 7/5 windows and cosine 0.5246208440170577.
+
+No functional Phase 2 blocker remains in tested Chromium. Auto/soft features are incomplete English heuristics; hard protection can make budgets infeasible. Legacy exposes the old anchor rule, not the entire previous scorer. No physical-device, other-browser, screen-reader or deployed-subpath check is claimed. No live Gemini calls, secrets inspection, dependency changes, push, deployment or Phase 3 work occurred. Earlier sections below are historical evidence.
+
 ## Dependabot maintenance — 2026-09-08
 
 Configuration/documentation-only cleanup: weekly grouped minor/patch updates for npm and Actions, with routine majors deferred and security updates still eligible. Application dependencies and workflows are unchanged. This pass ran `npm audit --json` (0 vulnerabilities), `npm run verify` (strict TypeScript, 140 unit tests, 14 mocked gateway tests, production build passed), `npm run check:core` (71 passed), YAML validation against the downloaded Dependabot JSON Schema (passed), and `git diff --check` (passed). Browser/model suites were not rerun in this pass. See [the implementation log](IMPLEMENTATION-LOG.md#2026-09-08-dependabot-cleanup) for all ten PR dispositions, actual remote CI evidence, exact validation commands and remaining settings/Actions risks. No push, deployment or live Gemini calls.
 
 ## Phase 1 update — September 8, 2026
 
-**First-time UX and result clarity: COMPLETE; commit-ready.** Changes are left uncommitted for human review. Full change list, decisions, failure history and limitations: [IMPLEMENTATION-LOG](IMPLEMENTATION-LOG.md).
+**First-time UX and result clarity: COMPLETE; commit-ready.** Full change list, decisions, failure history and limitations: [IMPLEMENTATION-LOG](IMPLEMENTATION-LOG.md).
 
 | Command actually run in this phase | Actual result |
 | --- | --- |
@@ -26,7 +48,7 @@ No Phase 1 functional blocker remains. No manual screen-reader, physical-device 
 
 Verified September 8, 2026 in this Windows workspace with Node **24.15.0**, npm **11.12.1**, Python **3.13.14** (fixture generation only), and Playwright **1.63.0 / Chromium 153.0.8010.12**. No Gemini key was inspected, no paid calls were made, and nothing was published or deployed.
 
-The folder initially had no Git repository. A local repository now retains the verified source, generated lockfile, tests and evidence. No remote was configured; secrets, dependencies, model caches and build output are excluded.
+Initial integration established the repository with verified source, lockfile, tests and evidence. Secrets, dependencies, model caches and build output are excluded.
 
 ## Commands actually executed
 
